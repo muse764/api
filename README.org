@@ -1,0 +1,19 @@
+#+TITLE: MUSE
+#+AUTHOR: Mubarek Seid Juhar
+#+EMAIL: mubareksd@gmail.com
+#+DESCRIPTION: Muse Backend Doc
+#+KEYWORDS: muse
+
+* TABLE OF CONTENTS :toc:
+- [[#intro][Intro]]
+- [[#contributions][CONTRIBUTIONs]]
+- [[#authors][AUTHORS]]
+- [[#license][LICENSE]]
+
+* Intro
+
+* CONTRIBUTIONs
+
+* AUTHORS
+
+* LICENSE
