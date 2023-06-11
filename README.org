@@ -1,13 +1,13 @@
-* 📗 TABLE OF CONTENTS :toc:
-- [[#-muse][📖 MUSE]]
-- [[#-authors][👥 AUTHORS]]
-- [[#-faq][❓ FAQ]]
-- [[#-license][📝 LICENSE]]
+** 📗 Table Of Contents :toc:
+  - [[#-muse-api][📖 Muse Api]]
+  - [[#-authors][👥 Authors]]
+  - [[#-faq][❓ FAQ]]
+  - [[#-license][📝 License]]
 
-* 📖 MUSE
+** 📖 Muse Api
 
-* 👥 AUTHORS
+** 👥 Authors
 
-* ❓ FAQ
+** ❓ FAQ
 
-* 📝 LICENSE
+** 📝 License
