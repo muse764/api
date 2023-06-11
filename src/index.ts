@@ -12,7 +12,7 @@ const app = express();
 app.use(
   cors({
     credentials: true,
-  }),
+  })
 );
 app.use(compression());
 app.use(cookieParser());
@@ -29,5 +29,5 @@ const PORT = process.env.PORT ?? 5000;
 
 server.listen(PORT, () =>
   console.log(`
-🚀 Server ready at: http://localhost:${PORT}`),
+🚀 Server ready at: http://localhost:${PORT}`)
 );

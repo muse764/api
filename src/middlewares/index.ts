@@ -1,3 +1,4 @@
-import { isAuthorized } from './authorization';
+import isAuthenticated from "./authentication";
+import authorize from "./authorization";
 
-export { isAuthorized };
+export { authorize, isAuthenticated };

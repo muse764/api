@@ -11,84 +11,113 @@ datasource db {
 }
 
 model User {
-  id       String @id
-  username String @unique
-  email    String @unique
-  password String
-  type     String
-  images Image[]
-}
-
-model Artist {
-  id     String          @id
-  name   String
-  images Image[]
-  tracks ArtistToTrack[]
-  albums ArtistToAlbum[]
-}
-
-model Track {
-  id          String          @id
-  title       String
-  album       Album?          @relation(fields: [albumId], references: [id])
-  albumId     String?
-  disc_number Int
-  images      Image[]
-  artists     ArtistToTrack[]
-}
-
-model ArtistToAlbum {
-  artist   Artist @relation(fields: [artistId], references: [id])
-  artistId String
-  album    Album  @relation(fields: [albumId], references: [id])
-  albumId  String
-
-  @@id([albumId, artistId])
-}
-
-model ArtistToTrack {
-  artist   Artist @relation(fields: [artistId], references: [id])
-  artistId String
-  track    Track  @relation(fields: [trackId], references: [id])
-  trackId  String
-
-  @@id([trackId, artistId])
+  id        String        @id
+  full_name String
+  username  String        @unique
+  email     String        @unique
+  password  String
+  role      UserRole      @default(USER)
+  active    Boolean       @default(true)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  images    Image[]
+  albums    Album[]
+  playlists Playlist[]
+  tracks    TrackArtist[]
 }
 
 model Album {
-  id           String          @id
+  id           String    @id
   name         String
-  type         String
-  tracks       Track[]
-  images       Image[]
   release_date String
-  genres       GenreToAlbum[]
-  artists      ArtistToAlbum[]
+  type         AlbumType @default(album)
+  genres       Genre[]
+  images       Image[]
+  published    Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  artists      User[]
+  tracks       Track[]
 }
 
-model GenreToAlbum {
-  album   Album  @relation(fields: [albumId], references: [id])
-  albumId String
-  genre   Genre  @relation(fields: [genreId], references: [id])
-  genreId String
-
-  @@id([albumId, genreId])
-}
-
-model Image {
-  id       String  @id
-  artist   Artist? @relation(fields: [artistId], references: [id])
-  artistId String?
-  album    Album?  @relation(fields: [albumId], references: [id])
-  albumId  String?
-  track    Track?  @relation(fields: [trackId], references: [id])
-  trackId  String?
-  user    User?  @relation(fields: [userId], references: [id])
-  userId  String?
+model Track {
+  id           String        @id
+  name         String
+  file         String
+  duration     Int
+  published    Boolean       @default(false)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  artists      TrackArtist[]
+  albumId      String
+  album        Album         @relation(fields: [albumId], references: [id])
+  track_number Int
+  playlists    Playlist[]
 }
 
 model Genre {
-  id     String         @id
-  name   String
-  albums GenreToAlbum[]
+  id        String   @id
+  name      String   @unique
+  albums    Album[]
+  images    Image[]
+  active    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Image {
+  id        String     @id
+  file      String
+  width     Int
+  height    Int
+  albums    Album[]
+  playlists Playlist[]
+  genres    Genre[]
+  userId    String
+  user      User       @relation(fields: [userId], references: [id])
+  published Boolean    @default(false)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Playlist {
+  id          String   @id
+  name        String
+  description String
+  owner       User     @relation(fields: [ownerId], references: [id])
+  ownerId     String
+  public      Boolean  @default(false)
+  tracks      Track[]
+  images      Image[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model TrackArtist {
+  track    Track      @relation(fields: [trackId], references: [id])
+  trackId  String
+  role     ArtistRole @default(MAIN)
+  artist   User       @relation(fields: [artistId], references: [id])
+  artistId String
+
+  @@unique([trackId, artistId])
+}
+
+enum UserRole {
+  USER
+  ARTIST
+  MODERATOR
+  ADMIN
+  SUPERADMIN
+}
+
+enum ArtistRole {
+  MAIN
+  FEATURE
+}
+
+enum AlbumType {
+  album
+  compilation
+  single
 }

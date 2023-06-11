@@ -1,18 +1,19 @@
-import { PrismaClient } from '@prisma/client';
-import { Request, Response, NextFunction } from 'express';
-import { merge, get } from 'lodash';
-import jwt from 'jsonwebtoken';
+import { NextFunction, Request, Response } from "express";
 
-const prisma = new PrismaClient();
+export default function authorize(...authorizedRoles: string[]) {
+    return (req: Request, res: Response, next: NextFunction) => {
+        const { user } = req.body;
 
-export const isAuthenticated = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {};
-
-export const isAuthorized = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {};
+        if (user && authorizedRoles.includes(user.role)) {
+            next();
+        } else {
+            const status = 403;
+            const message = "Forbidden";
+            res.status(status).json({
+                error: {
+                    status,
+                    message,
+            } });
+        }
+    };
+}

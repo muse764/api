@@ -1,39 +1,88 @@
 import {
-  createArtist,
-  deleteArtistById,
-  getArtistById,
-  getArtists,
-  updateArtistById,
-} from './artists';
+  createAlbumModel,
+  deleteAlbumByIdModel,
+  deleteAllAlbumsModel,
+  getAlbumByIdModel,
+  getAllAlbumsModel,
+  updateAlbumByIdModel,
+} from './albums';
+import { getArtistById, getArtists } from './artists';
 import {
-  createUser,
-  deleteUserById,
-  getUserByEmail,
-  getUserByEmailWithPassword,
-  getUserById,
-  getUserByIdWithPassword,
-  getUserByUsername,
-  getUserByUsernameWithPassword,
-  getUsers,
-  getUsersWithPassword,
-  updateUserById,
+  createGenreModel,
+  deleteAllGenresModel,
+  deleteGenreByIdModel,
+  getAllGenresModel,
+  getGenreByIdModel,
+  updateGenreByIdModel,
+} from './genres';
+import {
+  createImageModel,
+  deleteImageByIdModel,
+  getAllImagesModel,
+  getImageByIdModel,
+  updateImageByIdModel,
+} from './images';
+import {
+  createTrackModel,
+  deleteTrackModel,
+  getAllTracksModel,
+  getTrackByIdModel,
+  updateTrackModel,
+} from './tracks';
+import {
+  createUserModel,
+  deleteAllUsersModel,
+  deleteUserByIdModel,
+  getUserByEmailModel,
+  getUserByIdModel,
+  getUserByUsernameModel,
+  getUsersModel,
+  updateUserByIdModel,
 } from './users';
 
 export {
-  createUser,
-  deleteUserById,
-  getUserByEmail,
-  getUserByEmailWithPassword,
-  getUserById,
-  getUserByIdWithPassword,
-  getUserByUsername,
-  getUserByUsernameWithPassword,
-  getUsers,
-  getUsersWithPassword,
-  updateUserById,
-  createArtist,
-  deleteArtistById,
+  createAlbumModel,
+  deleteAlbumByIdModel,
+  deleteAllAlbumsModel,
+  getAllAlbumsModel,
+  getAlbumByIdModel,
+  updateAlbumByIdModel,
+
+  // ARTISTS
   getArtistById,
   getArtists,
-  updateArtistById,
+
+  // GENRES
+  createGenreModel,
+  deleteAllGenresModel,
+  deleteGenreByIdModel,
+  getAllGenresModel,
+  getGenreByIdModel,
+  updateGenreByIdModel,
+
+  // IMAGES
+  createImageModel,
+  deleteImageByIdModel,
+  getAllImagesModel,
+  getImageByIdModel,
+  updateImageByIdModel,
+
+  // PLAYLISTS
+
+  // TRACKS
+  createTrackModel,
+  deleteTrackModel,
+  getAllTracksModel,
+  getTrackByIdModel,
+  updateTrackModel,
+
+  // USERS
+  createUserModel,
+  deleteUserByIdModel,
+  deleteAllUsersModel,
+  getUserByEmailModel,
+  getUserByIdModel,
+  getUserByUsernameModel,
+  getUsersModel,
+  updateUserByIdModel,
 };

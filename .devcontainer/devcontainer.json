@@ -1,0 +1,65 @@
+{
+  "name": "Node.js & PostgreSQL",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "postCreateCommand": "npm install",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "usernamehw.errorlens",
+        "Catppuccin.catppuccin-vsc",
+        "aaron-bond.better-comments",
+        "formulahendry.code-runner",
+        "streetsidesoftware.code-spell-checker",
+        "ms-ossdata.vscode-postgresql",
+        "Gruntfuggly.todo-tree",
+        "humao.rest-client",
+        "esbenp.prettier-vscode",
+        "christian-kohler.path-intellisense",
+        "VisualStudioExptTeam.vscodeintellicode",
+        "VisualStudioExptTeam.intellicode-api-usage-examples",
+        "kisstkondoros.vscode-gutter-preview",
+        "eamodio.gitlens",
+        "GitHub.copilot",
+        "ms-azuretools.vscode-docker",
+        "adpyke.codesnap",
+        "mtxr.sqltools",
+        "mtxr.sqltools-driver-pg",
+        "WakaTime.vscode-wakatime",
+        "Prisma.prisma",
+        "yzhang.markdown-all-in-one",
+        "DavidAnson.vscode-markdownlint",
+        "bierner.github-markdown-preview",
+        "christian-kohler.npm-intellisense"
+      ],
+      "settings": {
+        "workbench.colorTheme": "Catppuccin Mocha",
+        "workbench.iconTheme": "material-icon-theme",
+        "files.autoSaveDelay": 1000,
+        "files.autoSave": "afterDelay",
+        "editor.formatOnPaste": true,
+        "editor.formatOnSave": true,
+        "editor.formatOnType": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll": true,
+          "source.organizeImports": true
+        },
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "eslint.validate": ["typescript", "javascript"],
+        "sqltools.connections": [
+          {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "muse",
+            "database": "muse",
+            "username": "postgres",
+            "password": "postgres"
+          }
+        ]
+      }
+    }
+  }
+}

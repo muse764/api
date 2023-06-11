@@ -3,35 +3,20 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export const getArtists = () =>
-  prisma.artist.findMany({
+  prisma.user.findMany({
+    where: {
+      role: 'ARTIST',
+    },
     select: {
       id: true,
-      name: true,
+      full_name: true,
+      active: true,
       images: true,
     },
   });
 
 export const getArtistById = (id: string) =>
-  prisma.artist.findUnique({ where: { id } });
-
-export const createArtist = (id: string, name: string) => {
-  return prisma.artist.create({
-    data: {
-      id,
-      name,
-    },
-  });
-};
-
-export const updateArtistById = (id: string, data: any) => {
-  return prisma.artist.update({
+  prisma.user.findUnique({
     where: { id },
-    data,
+    select: { id: true, full_name: true, active: true, images: true },
   });
-};
-
-export const deleteArtistById = (id: string) => {
-  return prisma.artist.delete({
-    where: { id },
-  });
-};

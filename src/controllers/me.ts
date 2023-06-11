@@ -1,9 +1,6 @@
-import { Request, Response, Router } from 'express';
-import { isAuthenticated } from '../middlewares';
+import { Request, Response } from "express";
 
-
-export default (router: Router) => {
-  router.get('/me', isAuthenticated, async (req: Request, res: Response) => {
+export const getLoggedinUser = async (req: Request, res: Response) => {
     try {
       const { user } = req.body;
       return res.status(200).json({ user });
@@ -17,5 +14,4 @@ export default (router: Router) => {
       },
       });
     }
-  });
-};
+  }

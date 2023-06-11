@@ -1,72 +1,20 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
+import {
+  createAlbumController,
+  deleteAlbumByIdController,
+  deleteAllAlbumsController,
+  getAlbumByIdController,
+  getAlbumsController,
+  updateAlbumByIdController,
+} from '../controllers';
+import { authorize, isAuthenticated } from '../middlewares';
 
 export default (router: Router) => {
-  router.get('/albums/', async (req: Request, res: Response) => {
-    res.status(200).json({
-      data: [
-        {
-          id: '',
-          name: '',
-          type: 'album',
-          total_tracks: 10,
-          tracks: [],
-          images: [],
-          release_date: '1990',
-          genres: [],
-          artists: [],
-        },
-        {
-          id: '',
-          name: '',
-          type: 'single',
-          total_tracks: 1,
-          tracks: [],
-          images: [],
-          release_date: '1990',
-          genres: [],
-          artists: [],
-        },
-        {
-          id: '',
-          name: '',
-          type: 'compilation',
-          total_tracks: 10,
-          tracks: [],
-          images: [],
-          release_date: '1990',
-          genres: [],
-          artists: [],
-        },
-      ],
-      success: true,
-      message: 'Operation completed successfully',
-    });
-  });
-  router.get('/albums/:id', async (req: Request, res: Response) => {
-    res.status(200).json({
-      data: {
-        id: '',
-        name: '',
-        type: 'album',
-        total_tracks: 10,
-        tracks: [],
-        images: [],
-        release_date: '1990',
-        genres: [],
-        artists: [],
-      },
-      success: true,
-      message: 'Operation completed successfully',
-    });
-  });
-  router.get('/albums/:id/tracks', async (req: Request, res: Response) => {
-    res.status(200).json({
-      data: {
-        total: 10,
-        tracks: [],
-      },
-      success: true,
-      message: 'Operation completed successfully',
-    });
-  });
+  router.get('/albums/', isAuthenticated, authorize('ADMIN', 'ARTIST', 'MODERATOR', 'SUPERADMIN', 'USER'), getAlbumsController);
+  router.get('/albums/:id', getAlbumByIdController);
+  // router.get('/albums/:id/tracks', );
+  router.post('/albums/', createAlbumController);
+  router.delete('/albums/', deleteAllAlbumsController);
+  router.delete('/albums/:id', deleteAlbumByIdController);
+  router.put('/albums/:id', updateAlbumByIdController);
 };

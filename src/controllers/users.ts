@@ -1,19 +1,18 @@
 import { Request, Response } from 'express';
 
-import { encryptPassword, comparePassword } from '../helpers';
+import { encryptPassword } from '../helpers';
 import {
-  getUsers,
-  getUserById,
-  updateUserById,
-  getUserByIdWithPassword,
-  deleteUserById,
+  deleteUserByIdModel,
+  getUserByIdModel,
+  getUsersModel,
+  updateUserByIdModel,
 } from '../models';
 
-export const getAllUsers = async (req: Request, res: Response) => {
+export const getAllUsersController = async (req: Request, res: Response) => {
   try {
-    const users = await getUsers();
+    const users = await getUsersModel();
     res.status(200).json({
-	    users: users
+      users,
     });
   } catch (error) {
     const status = 500;
@@ -27,7 +26,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
   }
 };
 
-export const getSingleUser = async (req: Request, res: Response) => {
+export const getSingleUserController = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
@@ -42,7 +41,7 @@ export const getSingleUser = async (req: Request, res: Response) => {
       });
     }
 
-    const user = await getUserById(id);
+    const user = await getUserByIdModel(id);
 
     if (!user) {
       const status = 404;
@@ -68,18 +67,21 @@ export const getSingleUser = async (req: Request, res: Response) => {
   }
 };
 
-export const updateSingleUser = async (req: Request, res: Response) => {
+export const updateSingleUserController = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { username, email, password, type } = req.body;
+    const { username, email, password, role } = req.body;
 
-    const user = await getUserByIdWithPassword(id);
+    const user = await getUserByIdModel(id);
 
     if (!user) {
-      return res.status(400).json({
-        data: null,
-        success: false,
-        message: 'User not found',
+      const status = 400;
+      const message = `User not found`;
+      return res.status(status).json({
+        error: {
+          status,
+          message,
+        },
       });
     }
 
@@ -89,18 +91,16 @@ export const updateSingleUser = async (req: Request, res: Response) => {
       hashed_password = await encryptPassword(password);
     }
 
-    const updated_user = await updateUserById(
+    const updated_user = await updateUserByIdModel(
       id,
       username ?? user.username,
       email ?? user.email,
       hashed_password ?? user.password,
-      type ?? user.type,
+      role ?? user.role
     );
 
     return res.status(200).json({
-      data: updated_user,
-      success: true,
-      message: 'Operation completed successfully',
+      updated_user,
     });
   } catch (error) {
     const status = 500;
@@ -114,7 +114,7 @@ export const updateSingleUser = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteSingleUser = async (req: Request, res: Response) => {
+export const deleteSingleUserController = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
@@ -129,7 +129,7 @@ export const deleteSingleUser = async (req: Request, res: Response) => {
       });
     }
 
-    const user = await getUserById(id);
+    const user = await getUserByIdModel(id);
 
     if (!user) {
       const status = 404;
@@ -142,13 +142,9 @@ export const deleteSingleUser = async (req: Request, res: Response) => {
       });
     }
 
-    await deleteUserById(id);
+    await deleteUserByIdModel(id);
 
-    return res.status(200).json({
-      data: null,
-      success: true,
-      message: 'Operation completed successfully',
-    });
+    return res.status(200).json({});
   } catch (error) {
     const status = 500;
     const message = 'Internal Server Error';
