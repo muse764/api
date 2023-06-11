@@ -1,13 +1,40 @@
-** 📗 Table Of Contents :toc:
-  - [[#-muse-api][📖 Muse Api]]
-  - [[#-authors][👥 Authors]]
-  - [[#-faq][❓ FAQ]]
-  - [[#-license][📝 License]]
+* 📗 Table Of Contents :toc:
+- [[#-muse-api][📖 Muse Api]]
+  - [[#-built-with][🛠 Built With]]
+  - [[#-features][🔭 Features]]
+  - [[#-live-demo][🚀 Live Demo]]
+  - [[#-getting-started][💻 Getting Started]]
+- [[#-authors][👥 Authors]]
+- [[#-faq][❓ FAQ]]
+- [[#-license][📝 License]]
 
-** 📖 Muse Api
+* 📖 Muse Api
 
-** 👥 Authors
+** 🛠 Built With
 
-** ❓ FAQ
+- Node.js / Express
 
-** 📝 License
+** 🔭 Features
+
+** 🚀 Live Demo
+
+** 💻 Getting Started
+
+*** 📝 Prerequisites
+
+- Node.js
+- PostgreSQL
+
+*** 📝 Setup
+
+**** Local
+
+**** Docker
+
+*** 📝 Usage
+
+* 👥 Authors
+
+* ❓ FAQ
+
+* 📝 License
