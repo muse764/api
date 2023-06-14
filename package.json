@@ -18,8 +18,7 @@
     "migrate:reset": "npx prisma migrate reset",
     "migrate:resolve": "npx prisma migrate resolve",
     "prisma:generate": "npx prisma generate",
-    "prisma:studio": "npx prisma studio",
-    "postinstall": "prisma generate"
+    "prisma:studio": "npx prisma studio"
   },
   "keywords": [],
   "author": "",
