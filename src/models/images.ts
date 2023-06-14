@@ -15,7 +15,7 @@ export const createImageModel = async (
       file,
       width,
       height,
-      userId
+      userId,
     },
   });
 

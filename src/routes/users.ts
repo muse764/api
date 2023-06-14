@@ -1,4 +1,4 @@
-import { type Router } from "express";
+import { type Router } from 'express';
 
 import {
   createUserController,
@@ -6,23 +6,23 @@ import {
   getAllUsersController,
   getSingleUserController,
   updateSingleUserController,
-} from "../controllers";
-import { authorize, isAuthenticated } from "../middlewares";
+} from '../controllers';
+import { authorize, isAuthenticated } from '../middlewares';
 
 export default (router: Router) => {
-  router.post("/users", createUserController);
-  router.get("/users", getAllUsersController);
+  router.post('/users', createUserController);
+  router.get('/users', getAllUsersController);
   router.get(
-    "/users/:id",
+    '/users/:id',
     isAuthenticated,
-    authorize("ADMIN", "MODERATOR", "SUPERADMIN"),
+    authorize('ADMIN', 'MODERATOR', 'SUPERADMIN'),
     getSingleUserController
   );
   router.put(
-    "/users/:id",
+    '/users/:id',
     isAuthenticated,
-    authorize("ADMIN", "MODERATOR", "SUPERADMIN"),
+    authorize('ADMIN', 'MODERATOR', 'SUPERADMIN'),
     updateSingleUserController
   );
-  router.delete("/users/:id", deleteSingleUserController);
+  router.delete('/users/:id', deleteSingleUserController);
 };

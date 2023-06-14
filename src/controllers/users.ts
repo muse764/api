@@ -1,6 +1,6 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
 
-import { encryptPassword } from "../helpers";
+import { encryptPassword } from '../helpers';
 import {
   createUserModel,
   deleteUserByIdModel,
@@ -8,8 +8,8 @@ import {
   getUserByEmailModel,
   getUsersModel,
   updateUserByIdModel,
-} from "../models";
-import crypto from "crypto";
+} from '../models';
+import crypto from 'crypto';
 
 export const createUserController = async (req: Request, res: Response) => {
   try {
@@ -93,7 +93,7 @@ export const createUserController = async (req: Request, res: Response) => {
       });
     }
 
-    if (username.includes(" ")) {
+    if (username.includes(' ')) {
       const status = 400;
       const message = `Username must not contain spaces`;
       return res.status(status).json({
@@ -104,7 +104,7 @@ export const createUserController = async (req: Request, res: Response) => {
       });
     }
 
-    if (!email.includes("@")) {
+    if (!email.includes('@')) {
       const status = 400;
       const message = `Please provide a valid email`;
       return res.status(status).json({
@@ -127,7 +127,7 @@ export const createUserController = async (req: Request, res: Response) => {
     }
 
     // if password includes spaces
-    if (password.includes(" ")) {
+    if (password.includes(' ')) {
       const status = 400;
       const message = `Password must not contain spaces`;
       return res.status(status).json({
@@ -200,7 +200,7 @@ export const createUserController = async (req: Request, res: Response) => {
     }
 
     const hashed_password = await encryptPassword(password);
-    const id = crypto.randomBytes(22).toString("hex");
+    const id = crypto.randomBytes(22).toString('hex');
 
     const new_user = await createUserModel(
       id,
@@ -250,7 +250,7 @@ export const getSingleUserController = async (req: Request, res: Response) => {
 
     if (!id || id.length < 20) {
       const status = 400;
-      const message = "invalid id";
+      const message = 'invalid id';
       return res.status(status).json({
         error: {
           status,
@@ -326,7 +326,7 @@ export const updateSingleUserController = async (
     });
   } catch (error) {
     const status = 500;
-    const message = "Internal Server Error";
+    const message = 'Internal Server Error';
     return res.status(status).json({
       error: {
         status,
@@ -345,7 +345,7 @@ export const deleteSingleUserController = async (
 
     if (!id || id.length < 20) {
       const status = 400;
-      const message = "invalid id";
+      const message = 'invalid id';
       return res.status(status).json({
         error: {
           status,
@@ -372,7 +372,7 @@ export const deleteSingleUserController = async (
     return res.status(200).json({});
   } catch (error) {
     const status = 500;
-    const message = "Internal Server Error";
+    const message = 'Internal Server Error';
     return res.status(status).json({
       error: {
         status,
