@@ -31,9 +31,9 @@ export const createGenreController = async (req: Request, res: Response) => {
     const genre = await createGenreModel(id, name, active);
 
     res.status(201).json(genre);
-  } catch (error) {
-    const status = 500;
-    const message = 'Something went wrong';
+  } catch (error: any) {
+    const status = error.status || 500;
+    const message = error.message || 'Internal server error';
     res.status(status).json({
       error: {
         status,
@@ -60,9 +60,9 @@ export const getAllGenresController = async (req: Request, res: Response) => {
     }
 
     res.status(200).json({ genres });
-  } catch (error) {
-    const status = 500;
-    const message = 'Something went wrong';
+  } catch (error: any) {
+    const status = error.status || 500;
+    const message = error.message || 'Internal server error';
     res.status(status).json({
       error: {
         status,
@@ -79,9 +79,9 @@ export const getGenreByIdController = async (req: Request, res: Response) => {
     const genre = await getGenreByIdModel(id);
 
     res.status(200).json(genre);
-  } catch (error) {
-    const status = 500;
-    const message = 'Something went wrong';
+  } catch (error: any) {
+    const status = error.status || 500;
+    const message = error.message || 'Internal server error';
     res.status(status).json({
       error: {
         status,
@@ -101,9 +101,9 @@ export const deleteGenreByIdController = async (
     const genre = await deleteGenreByIdModel(id);
 
     res.status(200).json(genre);
-  } catch (error) {
-    const status = 500;
-    const message = 'Something went wrong';
+  } catch (error: any) {
+    const status = error.status || 500;
+    const message = error.message || 'Internal server error';
     res.status(status).json({
       error: {
         status,
@@ -121,9 +121,9 @@ export const deleteAllGenresController = async (
     const genres = await deleteAllGenresModel();
 
     res.status(200).json(genres);
-  } catch (error) {
-    const status = 500;
-    const message = 'Something went wrong';
+  } catch (error: any) {
+    const status = error.status || 500;
+    const message = error.message || 'Internal server error';
     res.status(status).json({
       error: {
         status,
@@ -144,9 +144,9 @@ export const updateGenreByIdController = async (
     const genre = await updateGenreByIdModel(id, name, active);
 
     res.status(200).json(genre);
-  } catch (error) {
-    const status = 500;
-    const message = 'Something went wrong';
+  } catch (error: any) {
+    const status = error.status || 500;
+    const message = error.message || 'Internal server error';
     res.status(status).json({
       error: {
         status,

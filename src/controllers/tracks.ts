@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 
 import crypto from 'crypto';
-import { createTrackModel } from '../models';
+import { createTrackModel, getAllTracksModel } from '../models';
 
 export const createTrackController = async (req: Request, res: Response) => {
   const { name, file, duration, track_number, albumId, artists, user } =
@@ -38,9 +38,26 @@ export const createTrackController = async (req: Request, res: Response) => {
       artists
     );
     res.status(201).json(track);
-  } catch (error) {
-    const status = 500;
-    const message = 'Something went wrong';
+  } catch (error: any) {
+    const status = error.status || 500;
+    const message = error.message || 'Internal server error';
+    res.status(status).json({
+      error: {
+        status,
+        message,
+      },
+    });
+  }
+};
+
+export const getAllTracksController = async (req: Request, res: Response) => {
+  try {
+    const { limit, offset } = req.query;
+    const tracks = await getAllTracksModel(0, 0);
+    res.status(200).json({ tracks });
+  } catch (error: any) {
+    const status = error.status || 500;
+    const message = error.message || 'Internal server error';
     res.status(status).json({
       error: {
         status,

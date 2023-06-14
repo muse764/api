@@ -33,7 +33,7 @@ model Album {
   type         AlbumType @default(album)
   genres       Genre[]
   images       Image[]
-  published    Boolean   @default(false)
+  published    Boolean   @default(true)
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   artists      User[]
@@ -45,7 +45,7 @@ model Track {
   name         String
   file         String
   duration     Int
-  published    Boolean       @default(false)
+  published    Boolean       @default(true)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   artists      TrackArtist[]
@@ -60,7 +60,7 @@ model Genre {
   name      String   @unique
   albums    Album[]
   images    Image[]
-  active    Boolean  @default(false)
+  active    Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -75,7 +75,7 @@ model Image {
   genres    Genre[]
   userId    String
   user      User       @relation(fields: [userId], references: [id])
-  published Boolean    @default(false)
+  published Boolean    @default(true)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 }
@@ -86,7 +86,7 @@ model Playlist {
   description String
   owner       User     @relation(fields: [ownerId], references: [id])
   ownerId     String
-  public      Boolean  @default(false)
+  public      Boolean  @default(true)
   tracks      Track[]
   images      Image[]
   createdAt   DateTime @default(now())

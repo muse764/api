@@ -11,8 +11,7 @@ import {
 import crypto from 'crypto';
 
 export const createAlbumController = async (req: Request, res: Response) => {
-  const { name, release_date, type, published, genres, artists, tracks, user } =
-    req.body;
+  const { name, release_date, type, published, user } = req.body;
 
   const userId = user.id;
 
@@ -27,20 +26,7 @@ export const createAlbumController = async (req: Request, res: Response) => {
     });
   }
 
-  if (!release_date) {
-    const status = 400;
-    const message = 'Missing release_date field';
-    return res.status(status).json({
-      error: {
-        status,
-        message,
-      },
-    });
-  }
-
   const id = crypto.randomBytes(16).toString('hex');
-
-  artists.push(userId);
 
   try {
     const album = await createAlbumModel(
@@ -48,15 +34,12 @@ export const createAlbumController = async (req: Request, res: Response) => {
       name,
       release_date,
       type,
-      published,
-      artists,
-      genres,
-      tracks
+      published
     );
     res.status(201).json(album);
-  } catch (error) {
-    const status = 500;
-    const message = 'Something went wrong';
+  } catch (error: any) {
+    const status = error.status || 500;
+    const message = error.message || 'Internal server error';
     res.status(status).json({
       error: {
         status,
@@ -103,9 +86,9 @@ export const getAlbumsController = async (req: Request, res: Response) => {
     res.status(200).json({
       albums,
     });
-  } catch (error) {
-    const status = 500;
-    const message = 'Something went wrong';
+  } catch (error: any) {
+    const status = error.status || 500;
+    const message = error.message || 'Internal server error';
     res.status(status).json({
       error: {
         status,
@@ -143,9 +126,9 @@ export const getAlbumByIdController = async (req: Request, res: Response) => {
       artists: album.artists,
       tracks: album.tracks,
     });
-  } catch (error) {
-    const status = 500;
-    const message = 'Something went wrong';
+  } catch (error: any) {
+    const status = error.status || 500;
+    const message = error.message || 'Internal server error';
     res.status(status).json({
       error: {
         status,
@@ -171,9 +154,9 @@ export const updateAlbumByIdController = async (
       published
     );
     res.status(200).json(album);
-  } catch (error) {
-    const status = 500;
-    const message = 'Something went wrong';
+  } catch (error: any) {
+    const status = error.status || 500;
+    const message = error.message || 'Internal server error';
     res.status(status).json({
       error: {
         status,
@@ -192,9 +175,9 @@ export const deleteAlbumByIdController = async (
   try {
     const album = await deleteAlbumByIdModel(id);
     res.status(200).json(album);
-  } catch (error) {
-    const status = 500;
-    const message = 'Something went wrong';
+  } catch (error: any) {
+    const status = error.status || 500;
+    const message = error.message || 'Internal server error';
     res.status(status).json({
       error: {
         status,
@@ -211,9 +194,9 @@ export const deleteAllAlbumsController = async (
   try {
     const albums = await deleteAllAlbumsModel();
     res.status(200).json(albums);
-  } catch (error) {
-    const status = 500;
-    const message = 'Something went wrong';
+  } catch (error: any) {
+    const status = error.status || 500;
+    const message = error.message || 'Internal server error';
     res.status(status).json({
       error: {
         status,

@@ -41,6 +41,7 @@ import {
 } from './users';
 
 export {
+  // ALBUMS
   createAlbumModel,
   deleteAlbumByIdModel,
   deleteAllAlbumsModel,

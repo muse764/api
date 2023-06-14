@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, UserRole } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -8,6 +8,10 @@ export const getUserByIdModel = async (id: string) =>
   await prisma.user.findUnique({
     where: {
       id,
+    },
+    include: {
+      images: true,
+      playlists: true,
     },
   });
 
@@ -30,7 +34,8 @@ export const createUserModel = async (
   full_name: string,
   username: string,
   email: string,
-  password: string
+  password: string,
+  role: UserRole
 ) =>
   await prisma.user.create({
     data: {
@@ -39,6 +44,7 @@ export const createUserModel = async (
       username,
       email,
       password,
+      role,
     },
   });
 
@@ -47,7 +53,8 @@ export const updateUserByIdModel = async (
   full_name: string,
   username: string,
   email: string,
-  password: string
+  password: string,
+  role: UserRole
 ) =>
   await prisma.user.update({
     where: {
@@ -58,6 +65,7 @@ export const updateUserByIdModel = async (
       username,
       email,
       password,
+      role,
     },
   });
 

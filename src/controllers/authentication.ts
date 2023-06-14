@@ -205,7 +205,8 @@ export const register = async (req: Request, res: Response) => {
       full_name,
       username,
       email,
-      hashed_password
+      hashed_password,
+      "USER"
     );
 
     return res.status(201).json({

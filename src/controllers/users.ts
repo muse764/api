@@ -1,12 +1,230 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
-import { encryptPassword } from '../helpers';
+import { encryptPassword } from "../helpers";
 import {
+  createUserModel,
   deleteUserByIdModel,
   getUserByIdModel,
+  getUserByEmailModel,
   getUsersModel,
   updateUserByIdModel,
-} from '../models';
+} from "../models";
+import crypto from "crypto";
+
+export const createUserController = async (req: Request, res: Response) => {
+  try {
+    const { full_name, username, email, password, role } = req.body;
+
+    if (!username || !email || !password) {
+      const status = 400;
+      const message = `Please provide all required fields`;
+      return res.status(status).json({
+        error: {
+          status,
+          message,
+        },
+      });
+    }
+
+    if (!full_name) {
+      const status = 400;
+      const message = `Please provide your full name`;
+      return res.status(status).json({
+        error: {
+          status,
+          message,
+        },
+      });
+    }
+
+    if (!username) {
+      const status = 400;
+      const message = `Please provide your username`;
+      return res.status(status).json({
+        error: {
+          status,
+          message,
+        },
+      });
+    }
+
+    // if email is not provided
+    if (!email) {
+      const status = 400;
+      const message = `Please provide your email`;
+      return res.status(status).json({
+        error: {
+          status,
+          message,
+        },
+      });
+    }
+
+    if (!password) {
+      const status = 400;
+      const message = `Please provide your password`;
+      return res.status(status).json({
+        error: {
+          status,
+          message,
+        },
+      });
+    }
+
+    if (full_name.length < 3) {
+      const status = 400;
+      const message = `Full name must be at least 3 characters long`;
+      return res.status(status).json({
+        error: {
+          status,
+          message,
+        },
+      });
+    }
+
+    if (username.length < 6) {
+      const status = 400;
+      const message = `Username must be at least 6 characters long`;
+      return res.status(status).json({
+        error: {
+          status,
+          message,
+        },
+      });
+    }
+
+    if (username.includes(" ")) {
+      const status = 400;
+      const message = `Username must not contain spaces`;
+      return res.status(status).json({
+        error: {
+          status,
+          message,
+        },
+      });
+    }
+
+    if (!email.includes("@")) {
+      const status = 400;
+      const message = `Please provide a valid email`;
+      return res.status(status).json({
+        error: {
+          status,
+          message,
+        },
+      });
+    }
+
+    if (password.length < 8) {
+      const status = 400;
+      const message = `Password must be at least 8 characters long`;
+      return res.status(status).json({
+        error: {
+          status,
+          message,
+        },
+      });
+    }
+
+    // if password includes spaces
+    if (password.includes(" ")) {
+      const status = 400;
+      const message = `Password must not contain spaces`;
+      return res.status(status).json({
+        error: {
+          status,
+          message,
+        },
+      });
+    }
+
+    // if password includes at least one number
+    if (!/\d/.test(password)) {
+      const status = 400;
+      const message = `Password must include at least one number`;
+      return res.status(status).json({
+        error: {
+          status,
+          message,
+        },
+      });
+    }
+
+    // if password includes at least one uppercase letter
+    if (!/[A-Z]/.test(password)) {
+      const status = 400;
+      const message = `Password must include at least one uppercase letter`;
+      return res.status(status).json({
+        error: {
+          status,
+          message,
+        },
+      });
+    }
+
+    // if password includes at least one lowercase letter
+    if (!/[a-z]/.test(password)) {
+      const status = 400;
+      const message = `Password must include at least one lowercase letter`;
+      return res.status(status).json({
+        error: {
+          status,
+          message,
+        },
+      });
+    }
+
+    // if password includes at least one special character
+    if (!/[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/.test(password)) {
+      const status = 400;
+      const message = `Password must include at least one special character`;
+      return res.status(status).json({
+        error: {
+          status,
+          message,
+        },
+      });
+    }
+
+    const user = await getUserByEmailModel(email);
+
+    if (user) {
+      const status = 400;
+      const message = `User with email ${email} already exists`;
+      return res.status(status).json({
+        error: {
+          status,
+          message,
+        },
+      });
+    }
+
+    const hashed_password = await encryptPassword(password);
+    const id = crypto.randomBytes(22).toString("hex");
+
+    const new_user = await createUserModel(
+      id,
+      full_name,
+      username,
+      email,
+      hashed_password,
+      role
+    );
+
+    return res.status(201).json({
+      new_user,
+    });
+  } catch (error: any) {
+    const status = error.status || 500;
+    const message = error.message || 'Internal server error';
+    res.status(status).json({
+      error: {
+        status,
+        message,
+      },
+    });
+  }
+};
 
 export const getAllUsersController = async (req: Request, res: Response) => {
   try {
@@ -14,10 +232,10 @@ export const getAllUsersController = async (req: Request, res: Response) => {
     res.status(200).json({
       users,
     });
-  } catch (error) {
-    const status = 500;
-    const message = 'Internal Server Error';
-    return res.status(status).json({
+  } catch (error: any) {
+    const status = error.status || 500;
+    const message = error.message || 'Internal server error';
+    res.status(status).json({
       error: {
         status,
         message,
@@ -32,7 +250,7 @@ export const getSingleUserController = async (req: Request, res: Response) => {
 
     if (!id || id.length < 20) {
       const status = 400;
-      const message = 'invalid id';
+      const message = "invalid id";
       return res.status(status).json({
         error: {
           status,
@@ -55,10 +273,10 @@ export const getSingleUserController = async (req: Request, res: Response) => {
     }
 
     res.status(200).json(user);
-  } catch (error) {
-    const status = 500;
-    const message = 'Internal Server Error';
-    return res.status(status).json({
+  } catch (error: any) {
+    const status = error.status || 500;
+    const message = error.message || 'Internal server error';
+    res.status(status).json({
       error: {
         status,
         message,
@@ -67,10 +285,13 @@ export const getSingleUserController = async (req: Request, res: Response) => {
   }
 };
 
-export const updateSingleUserController = async (req: Request, res: Response) => {
+export const updateSingleUserController = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const { id } = req.params;
-    const { username, email, password, role } = req.body;
+    const { full_name, username, email, password, role } = req.body;
 
     const user = await getUserByIdModel(id);
 
@@ -93,6 +314,7 @@ export const updateSingleUserController = async (req: Request, res: Response) =>
 
     const updated_user = await updateUserByIdModel(
       id,
+      full_name ?? user.full_name,
       username ?? user.username,
       email ?? user.email,
       hashed_password ?? user.password,
@@ -104,7 +326,7 @@ export const updateSingleUserController = async (req: Request, res: Response) =>
     });
   } catch (error) {
     const status = 500;
-    const message = 'Internal Server Error';
+    const message = "Internal Server Error";
     return res.status(status).json({
       error: {
         status,
@@ -114,13 +336,16 @@ export const updateSingleUserController = async (req: Request, res: Response) =>
   }
 };
 
-export const deleteSingleUserController = async (req: Request, res: Response) => {
+export const deleteSingleUserController = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const { id } = req.params;
 
     if (!id || id.length < 20) {
       const status = 400;
-      const message = 'invalid id';
+      const message = "invalid id";
       return res.status(status).json({
         error: {
           status,
@@ -147,7 +372,7 @@ export const deleteSingleUserController = async (req: Request, res: Response) =>
     return res.status(200).json({});
   } catch (error) {
     const status = 500;
-    const message = 'Internal Server Error';
+    const message = "Internal Server Error";
     return res.status(status).json({
       error: {
         status,

@@ -7,16 +7,21 @@ export const getArtists = () =>
     where: {
       role: 'ARTIST',
     },
-    select: {
-      id: true,
-      full_name: true,
-      active: true,
+    include: {
+      albums: true,
       images: true,
+      playlists: true,
+      tracks: true,
     },
   });
 
 export const getArtistById = (id: string) =>
   prisma.user.findUnique({
     where: { id },
-    select: { id: true, full_name: true, active: true, images: true },
+    include: {
+      albums: true,
+      images: true,
+      playlists: true,
+      tracks: true,
+    },
   });
