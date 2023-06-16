@@ -3,7 +3,7 @@
   "dockerComposeFile": "docker-compose.yml",
   "service": "app",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-  "postCreateCommand": "npm i -g pnpm && pnpm install",
+  "postCreateCommand": "npm i -g prettier eslint && npm i -g pnpm && pnpm install",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -31,11 +31,16 @@
         "yzhang.markdown-all-in-one",
         "DavidAnson.vscode-markdownlint",
         "bierner.github-markdown-preview",
-        "christian-kohler.npm-intellisense"
+        "christian-kohler.npm-intellisense",
+        "GitHub.copilot-chat",
+        "GitHub.copilot-nightly",
+        "redhat.vscode-yaml"
       ],
       "settings": {
         "workbench.colorTheme": "Catppuccin Mocha",
         "workbench.iconTheme": "material-icon-theme",
+        "prettier.prettierPath": "/usr/local/share/npm-global/bin/prettier",
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
         "files.autoSaveDelay": 1000,
         "files.autoSave": "afterDelay",
         "editor.formatOnPaste": true,
@@ -43,9 +48,9 @@
         "editor.formatOnType": true,
         "editor.codeActionsOnSave": {
           "source.fixAll": true,
-          "source.organizeImports": true
+          "source.organizeImports": true,
+          "source.sortMembers": true
         },
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
         "eslint.validate": ["typescript", "javascript"],
         "sqltools.connections": [
           {

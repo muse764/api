@@ -133,3 +133,4 @@ dist
 migrations
 public
 requests.rest
+db

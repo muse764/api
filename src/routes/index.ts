@@ -6,8 +6,8 @@ import auth from './authentication';
 import genres from './genres';
 import images from './images';
 import me from './me';
-import users from './users';
 import tracks from './tracks';
+import users from './users';
 
 import { PrismaClient } from '@prisma/client';
 

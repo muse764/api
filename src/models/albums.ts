@@ -7,10 +7,14 @@ export const createAlbumModel = async (
   name: string,
   release_date: string,
   type: AlbumType,
-  published: boolean
-  // artists: string[],
-  // genres: string[],
-  // tracks: string[]
+  artists: string[],
+  tracks: {
+    id: string;
+    name: string;
+    file: string;
+    duration: number;
+    track_number: number;
+  }[]
 ) => {
   return await prisma.album.create({
     data: {
@@ -18,22 +22,18 @@ export const createAlbumModel = async (
       name,
       release_date,
       type,
-      published,
-      // artists: {
-      //   connect: artists.map((artist) => ({
-      //     id: artist,
-      //   })),
-      // },
-      // tracks: {
-      //   connect: tracks.map((track) => ({
-      //     id: track,
-      //   })),
-      // },
-      // genres: {
-      //   connect: genres.map((genre) => ({
-      //     id: genre,
-      //   })),
-      // },
+      artists: {
+        connect: artists.map((artistId) => {
+          return {
+            id: artistId,
+          };
+        }),
+      },
+      tracks: {
+        createMany: {
+          data: tracks,
+        },
+      },
     },
   });
 };

@@ -30,8 +30,38 @@ export const getAllTracksModel = async (limit: number, offset: number) => {
   return await prisma.track.findMany({
     skip: offset,
     take: limit,
-    include: {
-      artists: true,
+    select: {
+      id: true,
+      name: true,
+      file: true,
+      duration: true,
+      track_number: true,
+      album: {
+        select: {
+          id: true,
+          name: true,
+          type: true,
+          release_date: true,
+          images: {
+            select: {
+              file: true,
+              width: true,
+              height: true,
+            },
+          },
+        },
+      },
+      artists: {
+        select: {
+          role: true,
+          artistId: true,
+          artist: {
+            select: {
+              full_name: true,
+            },
+          },
+        },
+      },
     },
   });
 };
@@ -41,8 +71,38 @@ export const getTrackByIdModel = async (id: string) => {
     where: {
       id,
     },
-    include: {
-      artists: true,
+    select: {
+      id: true,
+      name: true,
+      file: true,
+      duration: true,
+      track_number: true,
+      album: {
+        select: {
+          id: true,
+          name: true,
+          type: true,
+          release_date: true,
+          images: {
+            select: {
+              file: true,
+              width: true,
+              height: true,
+            },
+          },
+        },
+      },
+      artists: {
+        select: {
+          role: true,
+          artistId: true,
+          artist: {
+            select: {
+              full_name: true,
+            },
+          },
+        },
+      },
     },
   });
 };

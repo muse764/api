@@ -10,13 +10,23 @@ import {
 import { authorize, isAuthenticated } from '../middlewares';
 
 export default (router: Router) => {
-  router.post('/users', createUserController);
-  router.get('/users', getAllUsersController);
+  router.get(
+    '/users',
+    isAuthenticated,
+    authorize('ADMIN', 'MODERATOR', 'SUPERADMIN'),
+    getAllUsersController
+  );
   router.get(
     '/users/:id',
     isAuthenticated,
     authorize('ADMIN', 'MODERATOR', 'SUPERADMIN'),
     getSingleUserController
+  );
+  router.post(
+    '/users',
+    isAuthenticated,
+    authorize('ADMIN', 'SUPERADMIN'),
+    createUserController
   );
   router.put(
     '/users/:id',
@@ -24,5 +34,10 @@ export default (router: Router) => {
     authorize('ADMIN', 'MODERATOR', 'SUPERADMIN'),
     updateSingleUserController
   );
-  router.delete('/users/:id', deleteSingleUserController);
+  router.delete(
+    '/users/:id',
+    isAuthenticated,
+    authorize('ADMIN', 'SUPERADMIN'),
+    deleteSingleUserController
+  );
 };

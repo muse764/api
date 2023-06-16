@@ -25,11 +25,16 @@ import {
 } from './genres';
 import {
   createImageController,
+  deleteImageController,
   getImagesController,
   getImageByIdController,
 } from './images';
 import { getLoggedinUser } from './me';
-import { getAllTracksController } from './tracks';
+import {
+  createTrackController,
+  getAllTracksController,
+  getAllTrackByIdController,
+} from './tracks';
 export {
   // AUTH
   login,
@@ -56,6 +61,7 @@ export {
 
   // IMAGE
   createImageController,
+  deleteImageController,
   getImagesController,
   getImageByIdController,
 
@@ -66,7 +72,9 @@ export {
   // SEARCH
 
   // TRACKS
+  createTrackController,
   getAllTracksController,
+  getAllTrackByIdController,
 
   // USERS
   createUserController,

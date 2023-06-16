@@ -1,0 +1,33 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Format",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["format"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "build",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["build"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "start",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["start"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "dev",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["dev"]
+    }
+  ]
+}

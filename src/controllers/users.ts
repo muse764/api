@@ -1,15 +1,16 @@
 import { Request, Response } from 'express';
 
+import crypto from 'crypto';
+import fs from 'fs';
 import { encryptPassword } from '../helpers';
 import {
   createUserModel,
   deleteUserByIdModel,
-  getUserByIdModel,
   getUserByEmailModel,
+  getUserByIdModel,
   getUsersModel,
   updateUserByIdModel,
 } from '../models';
-import crypto from 'crypto';
 
 export const createUserController = async (req: Request, res: Response) => {
   try {
@@ -210,6 +211,12 @@ export const createUserController = async (req: Request, res: Response) => {
       hashed_password,
       role
     );
+
+    const FOLDER = `public/users/${id}`;
+
+    if (!fs.existsSync(FOLDER)) {
+      fs.mkdirSync(FOLDER, { recursive: true });
+    }
 
     return res.status(201).json({
       new_user,

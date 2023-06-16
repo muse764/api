@@ -1,4 +1,6 @@
 import { Request, Response } from 'express';
+import fs from 'fs';
+import getAudioDurationInSeconds from 'get-audio-duration';
 import {
   createAlbumModel,
   deleteAlbumByIdModel,
@@ -11,7 +13,7 @@ import {
 import crypto from 'crypto';
 
 export const createAlbumController = async (req: Request, res: Response) => {
-  const { name, release_date, type, published, user } = req.body;
+  const { name, release_date, type, tracks, artists, user } = req.body;
 
   const userId = user.id;
 
@@ -26,15 +28,61 @@ export const createAlbumController = async (req: Request, res: Response) => {
     });
   }
 
+  artists.push(userId);
+
   const id = crypto.randomBytes(16).toString('hex');
 
   try {
+    await tracks.map(async (track: any) => {
+      const trackId = crypto.randomBytes(16).toString('hex');
+      track.id = trackId;
+
+      // check file extension of base64 string
+      var type = track.file.split(';')[0].split('/')[1];
+
+      if (
+        type !== 'mp3' &&
+        type !== 'wav' &&
+        type !== 'opus' &&
+        type !== 'webm'
+      ) {
+        return res.status(400).json({
+          message: 'invalid file type',
+        });
+      }
+
+      // convert base64 string file to buffer
+      const buffer = Buffer.from(track.file.split(';base64,').pop(), 'base64');
+      // const decodedString = buffer.toString('utf-8');
+
+      const FOLDER = `public/users/${user.id}/albums/${id}/tracks`;
+      const FILE = `${FOLDER}/${trackId}.${type}`;
+
+      // check if folder exists, if not create it
+      if (!fs.existsSync(FOLDER)) {
+        fs.mkdirSync(FOLDER, { recursive: true });
+      }
+
+      if (fs.existsSync(FOLDER)) {
+        const upload = fs.writeFileSync(FILE, buffer, {
+          encoding: 'base64',
+        });
+      }
+
+      track.file = FILE;
+
+      track.duration = await getAudioDurationInSeconds(FILE);
+
+      track.track_number = parseInt(track.track_number);
+    });
+
     const album = await createAlbumModel(
       id,
       name,
       release_date,
       type,
-      published
+      artists,
+      tracks
     );
     res.status(201).json(album);
   } catch (error: any) {

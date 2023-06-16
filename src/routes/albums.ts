@@ -10,21 +10,38 @@ import {
 import { authorize, isAuthenticated } from '../middlewares';
 
 export default (router: Router) => {
-  router.get(
-    '/albums/',
-    // isAuthenticated,
-    // authorize('ADMIN', 'ARTIST', 'MODERATOR', 'SUPERADMIN', 'USER'),
-    getAlbumsController
-  );
+  router.get('/albums/', getAlbumsController);
   router.get('/albums/:id', getAlbumByIdController);
-  // router.get('/albums/:id/tracks', );
   router.post(
     '/albums/',
     isAuthenticated,
-    authorize('SUPERADMIN', 'ADMIN', 'ARTIST'),
+    authorize('ARTIST'),
     createAlbumController
   );
-  router.delete('/albums/', deleteAllAlbumsController);
-  router.delete('/albums/:id', deleteAlbumByIdController);
-  router.put('/albums/:id', updateAlbumByIdController);
+  // router.get('/albums/:albumId/tracks', );
+  // router.get('/albums/:albumId/tracks/:trackId', );
+  // router.post('/albums/:albumId/artists', );
+  // router.post('/albums/:albumId/artists/:artistId', );
+  // router.post('/albums/:albumId/images', );
+  // router.post('/albums/:albumId/images/:imageId', );
+  // router.post('/albums/:albumId/genres', );
+  // router.post('/albums/:albumId/genres/:genreId', );
+  router.delete(
+    '/albums/',
+    isAuthenticated,
+    authorize('SUPERADMIN'),
+    deleteAllAlbumsController
+  );
+  router.delete(
+    '/albums/:id',
+    isAuthenticated,
+    authorize('ARTIST', 'ADMIN', 'SUPERADMIN'),
+    deleteAlbumByIdController
+  );
+  router.put(
+    '/albums/:id',
+    isAuthenticated,
+    authorize('ARTIST', 'MODERATOR', 'ADMIN', 'SUPERADMIN'),
+    updateAlbumByIdController
+  );
 };
