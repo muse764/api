@@ -8,6 +8,10 @@ import {
   removeAlbumsTracksController,
   updateAlbumDetailsController,
   uploadAlbumsImagesController,
+  addAlbumsGenresController,
+  removeAlbumsGenresController,
+  addAlbumsArtistsController,
+  removeAlbumsArtistsController,
 } from '../controllers';
 import { authorize, isAuthenticated } from '../middlewares';
 
@@ -58,5 +62,37 @@ export default (router: Router) => {
     isAuthenticated,
     authorize('ARTIST'),
     removeAlbumsImagesController
+  );
+
+  // Add Albums Genres
+  router.post(
+    '/albums/:album_id/genres',
+    isAuthenticated,
+    authorize('ARTIST'),
+    addAlbumsGenresController
+  );
+
+  // Remove Albums Genres
+  router.delete(
+    '/albums/:album_id/genres',
+    isAuthenticated,
+    authorize('ARTIST'),
+    removeAlbumsGenresController
+  );
+
+  // Add Albums Artists
+  router.post(
+    '/albums/:album_id/artists',
+    isAuthenticated,
+    authorize('ARTIST'),
+    addAlbumsArtistsController
+  );
+
+  // Remove Albums Artists
+  router.delete(
+    '/albums/:album_id/artists',
+    isAuthenticated,
+    authorize('ARTIST'),
+    removeAlbumsArtistsController
   );
 };

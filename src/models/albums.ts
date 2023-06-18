@@ -300,3 +300,71 @@ export const removeAlbumsImagesModel = async (
       },
     },
   });
+
+export const addAlbumsGenresModel = async (
+  album_id: string,
+  genres: string[]
+) =>
+  await prisma.album.update({
+    where: {
+      id: album_id,
+    },
+    data: {
+      genres: {
+        connect: genres.map((genre_id) => ({
+          id: genre_id,
+        })),
+      },
+    },
+  });
+
+export const removeAlbumsGenresModel = async (
+  album_id: string,
+  genres: string[]
+) =>
+  await prisma.album.update({
+    where: {
+      id: album_id,
+    },
+    data: {
+      genres: {
+        disconnect: genres.map((genre_id) => ({
+          id: genre_id,
+        })),
+      },
+    },
+  });
+
+export const addAlbumsArtistsModel = async (
+  album_id: string,
+  artists: string[]
+) =>
+  await prisma.album.update({
+    where: {
+      id: album_id,
+    },
+    data: {
+      artists: {
+        connect: artists.map((artist_id) => ({
+          id: artist_id,
+        })),
+      },
+    },
+  });
+
+export const removeAlbumsArtistsModel = async (
+  album_id: string,
+  artists: string[]
+) =>
+  await prisma.album.update({
+    where: {
+      id: album_id,
+    },
+    data: {
+      artists: {
+        disconnect: artists.map((artist_id) => ({
+          id: artist_id,
+        })),
+      },
+    },
+  });

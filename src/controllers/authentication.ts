@@ -1,5 +1,6 @@
 import { randomUUID } from 'crypto';
 import { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
 
 import {
   comparePassword,
@@ -8,6 +9,7 @@ import {
   generateRefreshToken,
 } from '../helpers';
 import { createUserModel, getUserByEmailModel } from '../models';
+import { getUserModel } from '../models/users';
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -293,6 +295,49 @@ export const login = async (req: Request, res: Response) => {
     return res.status(200).json({
       accessToken,
       refreshToken,
+    });
+  } catch (error) {
+    const status = 500;
+    const message = `Internal server error`;
+    return res.status(status).json({
+      error: {
+        status,
+        message,
+      },
+    });
+  }
+};
+
+export const logout = async (req: Request, res: Response) => {};
+
+export const refresh = async (req: Request, res: Response) => {
+  try {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      const status = 400;
+      const message = `Refresh token is missing`;
+      return res.status(status).json({
+        error: {
+          status,
+          message,
+        },
+      });
+    }
+
+    const decoded = jwt.verify(
+      refreshToken!,
+      process.env.REFRESH_TOKEN_SECRET!
+    );
+
+    const { userId } = decoded as any;
+
+    const user = await getUserModel(userId);
+
+    const accessToken = generateAccessToken(userId, user!.role);
+
+    return res.status(200).json({
+      accessToken,
     });
   } catch (error) {
     const status = 500;

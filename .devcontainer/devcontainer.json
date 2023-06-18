@@ -39,8 +39,6 @@
       "settings": {
         "workbench.colorTheme": "Catppuccin Mocha",
         "workbench.iconTheme": "material-icon-theme",
-        "prettier.prettierPath": "/usr/local/share/npm-global/bin/prettier",
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
         "files.autoSaveDelay": 1000,
         "files.autoSave": "afterDelay",
         "editor.formatOnPaste": true,

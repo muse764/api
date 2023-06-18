@@ -3,6 +3,7 @@ import { Router } from 'express';
 import albums from './albums';
 import artists from './artists';
 import auth from './authentication';
+import categories from './categories';
 import genres from './genres';
 import me from './me';
 import playlists from './playlists';
@@ -20,6 +21,7 @@ export default (): Router => {
   albums(router);
   artists(router);
   auth(router);
+  categories(router);
   genres(router);
   me(router);
   playlists(router);

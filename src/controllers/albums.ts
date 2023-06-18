@@ -2,10 +2,14 @@ import { randomUUID } from 'crypto';
 import fs from 'fs';
 import imageSize from 'image-size';
 import {
+  addAlbumsArtistsModel,
+  addAlbumsGenresModel,
   createAlbumsTracksModel,
   getAlbumsModel,
   getAlbumsTracksModel,
   getSeveralAlbumsModel,
+  removeAlbumsArtistsModel,
+  removeAlbumsGenresModel,
   removeAlbumsImagesModel,
   removeAlbumsTracksModel,
   updateAlbumDetailsModel,
@@ -149,7 +153,13 @@ export const updateAlbumDetailsController = async (req: any, res: any) => {
       });
     }
 
-    if (album?.artists[0].id !== user.id) {
+    const art: any = [];
+
+    album.artists.map(async (artist: any) => {
+      art.push(artist.id);
+    });
+
+    if (!art.includes(user.id)) {
       return res.status(403).json({
         error: {
           status: 403,
@@ -192,7 +202,13 @@ export const createAlbumsTracksController = async (req: any, res: any) => {
       });
     }
 
-    if (album?.artists[0].id !== user.id) {
+    const art: any = [];
+
+    album.artists.map(async (artist: any) => {
+      art.push(artist.id);
+    });
+
+    if (!art.includes(user.id)) {
       const status = 403;
       const message = `You can't create a track for another user`;
       return res.status(status).json({
@@ -267,7 +283,13 @@ export const uploadAlbumsImagesController = async (req: any, res: any) => {
       });
     }
 
-    if (album.artists[0].id !== user.id) {
+    const art: any = [];
+
+    album.artists.map(async (artist: any) => {
+      art.push(artist.id);
+    });
+
+    if (!art.includes(user.id)) {
       return res.status(403).json({
         error: {
           status: 403,
@@ -350,7 +372,13 @@ export const removeAlbumsTracksController = async (req: any, res: any) => {
       });
     }
 
-    if (album.artists[0].id !== user.id) {
+    const art: any = [];
+
+    album.artists.map(async (artist: any) => {
+      art.push(artist.id);
+    });
+
+    if (!art.includes(user.id)) {
       return res.status(403).json({
         error: {
           status: 403,
@@ -402,7 +430,13 @@ export const removeAlbumsImagesController = async (req: any, res: any) => {
       });
     }
 
-    if (album.artists[0].id !== user.id) {
+    const art: any = [];
+
+    album.artists.map(async (artist: any) => {
+      art.push(artist.id);
+    });
+
+    if (!art.includes(user.id)) {
       return res.status(403).json({
         error: {
           status: 403,
@@ -426,6 +460,182 @@ export const removeAlbumsImagesController = async (req: any, res: any) => {
         }
       });
     });
+
+    return res.status(200).json({ updatedAlbum });
+  } catch (error: any) {
+    return res.status(500).json({
+      error: {
+        status: 500,
+        message: error.message,
+      },
+    });
+  }
+};
+
+export const addAlbumsGenresController = async (req: any, res: any) => {
+  try {
+    const { album_id } = req.params;
+    const { genres, user } = req.body;
+
+    const album = await getAlbumsModel(album_id);
+
+    if (!album) {
+      return res.status(404).json({
+        error: {
+          status: 404,
+          message: `Album not found`,
+        },
+      });
+    }
+
+    const art: any = [];
+
+    album.artists.map(async (artist: any) => {
+      art.push(artist.id);
+    });
+
+    if (!art.includes(user.id)) {
+      return res.status(403).json({
+        error: {
+          status: 403,
+          message: `You can't update a album that you don't own`,
+        },
+      });
+    }
+
+    const updatedAlbum = await addAlbumsGenresModel(album_id, genres);
+
+    return res.status(200).json({ updatedAlbum });
+  } catch (error: any) {
+    return res.status(500).json({
+      error: {
+        status: 500,
+        message: error.message,
+      },
+    });
+  }
+};
+
+export const removeAlbumsGenresController = async (req: any, res: any) => {
+  try {
+    const { album_id } = req.params;
+    const { genres, user } = req.body;
+
+    const album = await getAlbumsModel(album_id);
+
+    if (!album) {
+      return res.status(404).json({
+        error: {
+          status: 404,
+          message: `Album not found`,
+        },
+      });
+    }
+
+    const art: any = [];
+
+    album.artists.map(async (artist: any) => {
+      art.push(artist.id);
+    });
+
+    if (!art.includes(user.id)) {
+      return res.status(403).json({
+        error: {
+          status: 403,
+          message: `You can't update a album that you don't own`,
+        },
+      });
+    }
+
+    const updatedAlbum = await removeAlbumsGenresModel(album_id, genres);
+
+    return res.status(200).json({ updatedAlbum });
+  } catch (error: any) {
+    return res.status(500).json({
+      error: {
+        status: 500,
+        message: error.message,
+      },
+    });
+  }
+};
+
+export const addAlbumsArtistsController = async (req: any, res: any) => {
+  try {
+    const { album_id } = req.params;
+    const { artists, user } = req.body;
+
+    const album = await getAlbumsModel(album_id);
+
+    if (!album) {
+      return res.status(404).json({
+        error: {
+          status: 404,
+          message: `Album not found`,
+        },
+      });
+    }
+
+    const art: any = [];
+
+    album.artists.map(async (artist: any) => {
+      art.push(artist.id);
+    });
+
+    if (!art.includes(user.id)) {
+      return res.status(403).json({
+        error: {
+          status: 403,
+          message: `You can't update a album that you don't own`,
+        },
+      });
+    }
+
+    const updatedAlbum = await addAlbumsArtistsModel(album_id, artists);
+
+    return res.status(200).json({ updatedAlbum });
+  } catch (error: any) {
+    return res.status(500).json({
+      error: {
+        status: 500,
+        message: error.message,
+      },
+    });
+  }
+};
+
+export const removeAlbumsArtistsController = async (req: any, res: any) => {
+  try {
+    const { album_id } = req.params;
+    const { artists, user } = req.body;
+
+    const album = await getAlbumsModel(album_id);
+
+    if (!album) {
+      return res.status(404).json({
+        error: {
+          status: 404,
+          message: `Album not found`,
+        },
+      });
+    }
+
+    const art: any = [];
+
+    album.artists.map(async (artist: any) => {
+      art.push(artist.id);
+    });
+
+    if (!art.includes(user.id)) {
+      return res.status(403).json({
+        error: {
+          status: 403,
+          message: `You can't update a album that you don't own`,
+        },
+      });
+    }
+
+    const updatedAlbum = await removeAlbumsArtistsModel(album_id, artists);
 
     return res.status(200).json({ updatedAlbum });
   } catch (error: any) {
