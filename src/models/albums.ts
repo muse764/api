@@ -2,98 +2,301 @@ import { AlbumType, PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export const createAlbumModel = async (
-  id: string,
-  name: string,
-  release_date: string,
-  type: AlbumType,
-  artists: string[],
-  tracks: {
-    id: string;
-    name: string;
-    file: string;
-    duration: number;
-    track_number: number;
-  }[]
-) => {
-  return await prisma.album.create({
-    data: {
-      id,
-      name,
-      release_date,
-      type,
+export const getAlbumsModel = async (album_id: string) =>
+  await prisma.album.findUnique({
+    where: {
+      id: album_id,
+    },
+    select: {
+      id: true,
+      name: true,
+      type: true,
+      release_date: true,
+      genres: {
+        select: {
+          name: true,
+        },
+      },
       artists: {
-        connect: artists.map((artistId) => {
-          return {
-            id: artistId,
-          };
-        }),
+        select: {
+          id: true,
+          full_name: true,
+          images: {
+            select: {
+              id: true,
+              file: true,
+              width: true,
+              height: true,
+            },
+          },
+        },
       },
       tracks: {
-        createMany: {
-          data: tracks,
+        select: {
+          id: true,
+          name: true,
+          file: true,
+          track_number: true,
+          artists: {
+            select: {
+              id: true,
+              full_name: true,
+            },
+          },
+          duration: true,
+        },
+      },
+      images: {
+        select: {
+          id: true,
+          file: true,
+          width: true,
+          height: true,
         },
       },
     },
   });
-};
 
-export const getAllAlbumsModel = async (limit: number, offset: number) => {
-  return await prisma.album.findMany({
-    skip: offset,
-    take: limit,
-    include: {
-      artists: true,
-      images: true,
-      tracks: true,
-      genres: true,
-    },
-  });
-};
+export async function getSeveralAlbumsModel(ids: string[]): Promise<{}[]>;
+export async function getSeveralAlbumsModel(
+  limit: number,
+  offset: number
+): Promise<{}[]>;
+export async function getSeveralAlbumsModel(
+  idsOrLimit?: string[] | number,
+  offset?: number
+): Promise<{}[]> {
+  if (Array.isArray(idsOrLimit)) {
+    return await prisma.album.findMany({
+      where: {
+        id: {
+          in: idsOrLimit,
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        type: true,
+        release_date: true,
+        genres: {
+          select: {
+            name: true,
+          },
+        },
+        artists: {
+          select: {
+            id: true,
+            full_name: true,
+            images: {
+              select: {
+                id: true,
+                file: true,
+                width: true,
+                height: true,
+              },
+            },
+          },
+        },
+        tracks: {
+          select: {
+            id: true,
+            name: true,
+            file: true,
+            track_number: true,
+            artists: {
+              select: {
+                id: true,
+                full_name: true,
+              },
+            },
+            duration: true,
+          },
+        },
+        images: {
+          select: {
+            id: true,
+            file: true,
+            width: true,
+            height: true,
+          },
+        },
+      },
+    });
+  } else {
+    return await prisma.album.findMany({
+      skip: offset,
+      take: idsOrLimit,
+      select: {
+        id: true,
+        name: true,
+        type: true,
+        release_date: true,
+        genres: {
+          select: {
+            name: true,
+          },
+        },
+        artists: {
+          select: {
+            id: true,
+            full_name: true,
+            images: {
+              select: {
+                id: true,
+                file: true,
+                width: true,
+                height: true,
+              },
+            },
+          },
+        },
+        tracks: {
+          select: {
+            id: true,
+            name: true,
+            file: true,
+            track_number: true,
+            artists: {
+              select: {
+                id: true,
+                full_name: true,
+              },
+            },
+            duration: true,
+          },
+        },
+        images: {
+          select: {
+            id: true,
+            file: true,
+            width: true,
+            height: true,
+          },
+        },
+      },
+    });
+  }
+}
 
-export const getAlbumByIdModel = async (id: string) => {
-  return await prisma.album.findUnique({
+export const getAlbumsTracksModel = async (
+  album_id: string,
+  limit: number,
+  offset: number
+) =>
+  await prisma.album.findUnique({
     where: {
-      id,
+      id: album_id,
     },
-    include: {
-      artists: true,
-      images: true,
-      tracks: true,
-      genres: true,
+    select: {
+      tracks: {
+        skip: offset,
+        take: limit,
+        select: {
+          id: true,
+          name: true,
+          file: true,
+          artists: {
+            select: {
+              id: true,
+              full_name: true,
+            },
+          },
+          track_number: true,
+          duration: true,
+        },
+      },
     },
   });
-};
 
-export const updateAlbumByIdModel = async (
-  id: string,
+export const updateAlbumDetailsModel = async (
+  album_id: string,
   name: string,
   release_date: string,
-  type: AlbumType,
-  published: boolean
-) => {
-  return await prisma.album.update({
+  type: AlbumType
+) =>
+  await prisma.album.update({
     where: {
-      id,
+      id: album_id,
     },
     data: {
       name,
       release_date,
       type,
-      published,
     },
   });
-};
 
-export const deleteAlbumByIdModel = async (id: string) => {
-  return await prisma.album.delete({
+export const createAlbumsTracksModel = async (
+  album_id: string,
+  tracks: {
+    id: string;
+    name: string;
+    duration: number;
+    albumId: string;
+    file: string;
+    track_number: number;
+  }[]
+) =>
+  await prisma.album.update({
     where: {
-      id,
+      id: album_id,
+    },
+    data: {
+      tracks: {
+        create: tracks,
+      },
     },
   });
-};
 
-// TODO: REMOVE IN PRODUCTION
-export const deleteAllAlbumsModel = async () => {
-  return await prisma.album.deleteMany();
-};
+export const uploadAlbumsImagesModel = async (
+  album_id: string,
+  images: {
+    id: string;
+    file: string;
+    width: number;
+    height: number;
+  }[]
+) =>
+  await prisma.album.update({
+    where: {
+      id: album_id,
+    },
+    data: {
+      images: {
+        create: images,
+      },
+    },
+  });
+
+export const removeAlbumsTracksModel = async (
+  album_id: string,
+  tracks: string[]
+) =>
+  await prisma.album.update({
+    where: {
+      id: album_id,
+    },
+    data: {
+      tracks: {
+        delete: tracks.map((track_id) => ({
+          id: track_id,
+        })),
+      },
+    },
+  });
+
+export const removeAlbumsImagesModel = async (
+  album_id: string,
+  images: string[]
+) =>
+  await prisma.album.update({
+    where: {
+      id: album_id,
+    },
+    data: {
+      images: {
+        delete: images.map((image_id) => ({
+          id: image_id,
+        })),
+      },
+    },
+  });

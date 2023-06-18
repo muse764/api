@@ -1,43 +1,213 @@
-import { Request, Response } from 'express';
+import { randomUUID } from 'crypto';
 import fs from 'fs';
-import getAudioDurationInSeconds from 'get-audio-duration';
+import imageSize from 'image-size';
 import {
-  createAlbumModel,
-  deleteAlbumByIdModel,
-  deleteAllAlbumsModel,
-  getAlbumByIdModel,
-  getAllAlbumsModel,
-  updateAlbumByIdModel,
+  createAlbumsTracksModel,
+  getAlbumsModel,
+  getAlbumsTracksModel,
+  getSeveralAlbumsModel,
+  removeAlbumsImagesModel,
+  removeAlbumsTracksModel,
+  updateAlbumDetailsModel,
+  uploadAlbumsImagesModel,
 } from '../models';
 
-import crypto from 'crypto';
+export const getAlbumsController = async (req: any, res: any) => {
+  try {
+    const { album_id } = req.params;
+    const album = await getAlbumsModel(album_id);
 
-export const createAlbumController = async (req: Request, res: Response) => {
-  const { name, release_date, type, tracks, artists, user } = req.body;
+    if (!album) {
+      const status = 404;
+      const message = `Album not found`;
+      return res.status(status).json({
+        error: {
+          status,
+          message,
+        },
+      });
+    }
 
-  const userId = user.id;
-
-  if (!name) {
-    const status = 400;
-    const message = 'Missing name field';
-    return res.status(status).json({
+    return res.status(200).json(album);
+  } catch (error: any) {
+    return res.status(500).json({
       error: {
-        status,
-        message,
+        status: 500,
+        message: error.message,
       },
     });
   }
+};
 
-  artists.push(userId);
-
-  const id = crypto.randomBytes(16).toString('hex');
-
+export const getSeveralAlbumsController = async (req: any, res: any) => {
   try {
-    await tracks.map(async (track: any) => {
-      const trackId = crypto.randomBytes(16).toString('hex');
-      track.id = trackId;
+    const { ids, limit, offset } = req.query;
 
-      // check file extension of base64 string
+    if (
+      (limit && offset && ids) ||
+      (limit && !offset && ids) ||
+      (!limit && offset && ids)
+    ) {
+      return res.status(400).json({
+        error: {
+          status: 400,
+          message: `You can't use limit, offset and ids at the same time`,
+        },
+      });
+    }
+
+    if (!limit && !offset && !ids) {
+      return res.status(400).json({
+        error: {
+          status: 400,
+          message: `You must use limit, offset or ids`,
+        },
+      });
+    }
+
+    if ((limit && !offset) || (!limit && offset)) {
+      return res.status(400).json({
+        error: {
+          status: 400,
+          message: `You must use limit and offset at the same time`,
+        },
+      });
+    }
+
+    if (limit && offset) {
+      const albums = await getSeveralAlbumsModel(Number(limit), Number(offset));
+      return res.status(200).json({ albums });
+    }
+
+    if (ids) {
+      const idsArray = (ids as string).split(',');
+
+      const albums = await getSeveralAlbumsModel(idsArray);
+      return res.status(200).json({ albums });
+    }
+  } catch (error: any) {
+    return res.status(500).json({
+      error: {
+        status: 500,
+        message: error.message,
+      },
+    });
+  }
+};
+
+export const getAlbumsTracksController = async (req: any, res: any) => {
+  try {
+    const { album_id } = req.params;
+    const { limit, offset } = req.query;
+
+    if (!limit || !offset) {
+      return res.status(400).json({
+        error: {
+          status: 400,
+          message: `You must use limit and offset`,
+        },
+      });
+    }
+
+    const tracks = await getAlbumsTracksModel(
+      album_id,
+      Number(limit),
+      Number(offset)
+    );
+
+    return res.status(200).json({
+      limit,
+      offset,
+      total: tracks?.tracks.length,
+      tracks: tracks?.tracks,
+    });
+  } catch (error: any) {
+    return res.status(500).json({
+      error: {
+        status: 500,
+        message: error.message,
+      },
+    });
+  }
+};
+
+export const updateAlbumDetailsController = async (req: any, res: any) => {
+  try {
+    const { album_id } = req.params;
+    const { name, release_date, type, user } = req.body;
+
+    const album = await getAlbumsModel(album_id);
+
+    console.log(name);
+
+    if (!album) {
+      return res.status(404).json({
+        error: {
+          status: 404,
+          message: `Album not found`,
+        },
+      });
+    }
+
+    if (album?.artists[0].id !== user.id) {
+      return res.status(403).json({
+        error: {
+          status: 403,
+          message: `You can't update a album that you don't own`,
+        },
+      });
+    }
+
+    const updatedAlbum = await updateAlbumDetailsModel(
+      album_id,
+      name,
+      release_date,
+      type
+    );
+
+    return res.status(200).json(updatedAlbum);
+  } catch (error: any) {
+    return res.status(500).json({
+      error: {
+        status: 500,
+        message: error.message,
+      },
+    });
+  }
+};
+
+export const createAlbumsTracksController = async (req: any, res: any) => {
+  try {
+    const { album_id } = req.params;
+    const { tracks, user } = req.body;
+
+    const album = await getAlbumsModel(album_id);
+
+    if (!album) {
+      return res.status(404).json({
+        error: {
+          status: 404,
+          message: `Album not found`,
+        },
+      });
+    }
+
+    if (album?.artists[0].id !== user.id) {
+      const status = 403;
+      const message = `You can't create a track for another user`;
+      return res.status(status).json({
+        error: {
+          status,
+          message,
+        },
+      });
+    }
+
+    tracks.map(async (track: any) => {
+      const track_id = randomUUID();
+      track.id = track_id;
+      track.track_number = Number(track.track_number);
+
       var type = track.file.split(';')[0].split('/')[1];
 
       if (
@@ -55,8 +225,8 @@ export const createAlbumController = async (req: Request, res: Response) => {
       const buffer = Buffer.from(track.file.split(';base64,').pop(), 'base64');
       // const decodedString = buffer.toString('utf-8');
 
-      const FOLDER = `public/users/${user.id}/albums/${id}/tracks`;
-      const FILE = `${FOLDER}/${trackId}.${type}`;
+      const FOLDER = `public/users/${user.id}/albums/${album_id}/tracks`;
+      const FILE = `${FOLDER}/${track_id}.${type}`;
 
       // check if folder exists, if not create it
       if (!fs.existsSync(FOLDER)) {
@@ -70,185 +240,199 @@ export const createAlbumController = async (req: Request, res: Response) => {
       }
 
       track.file = FILE;
-
-      track.duration = await getAudioDurationInSeconds(FILE);
-
-      track.track_number = parseInt(track.track_number);
+      track.duration = 0;
+      // await getAudioDurationInSeconds(FILE).then((duration) => track.duration = duration);
     });
 
-    const album = await createAlbumModel(
-      id,
-      name,
-      release_date,
-      type,
-      artists,
-      tracks
-    );
-    res.status(201).json(album);
-  } catch (error: any) {
-    const status = error.status || 500;
-    const message = error.message || 'Internal server error';
-    res.status(status).json({
-      error: {
-        status,
-        message,
-      },
-    });
+    const track = await createAlbumsTracksModel(album_id, tracks);
+    return res.status(201).json(track);
+  } catch (error) {
+    console.log(error);
   }
 };
 
-export const getAlbumsController = async (req: Request, res: Response) => {
+export const uploadAlbumsImagesController = async (req: any, res: any) => {
   try {
-    const { ids, limit, offset } = req.query;
+    const { album_id } = req.params;
+    const { images, user } = req.body;
 
-    var albums;
-
-    if (ids) {
-      const idsArray = (ids as string).split(',');
-      albums = await Promise.all(
-        idsArray.map(async (id) => {
-          const album = await getAlbumByIdModel(id);
-          return album;
-        })
-      );
-    } else {
-      if (limit && offset) {
-        albums = await getAllAlbumsModel(Number(limit), Number(offset));
-      }
-
-      if (limit && !offset) {
-        albums = await getAllAlbumsModel(Number(limit), 0);
-      }
-
-      if (!limit && offset) {
-        albums = await getAllAlbumsModel(20, Number(offset));
-      }
-
-      if (!limit && !offset) {
-        albums = await getAllAlbumsModel(
-          Number(limit) | 20,
-          Number(offset) | 0
-        );
-      }
-    }
-    res.status(200).json({
-      albums,
-    });
-  } catch (error: any) {
-    const status = error.status || 500;
-    const message = error.message || 'Internal server error';
-    res.status(status).json({
-      error: {
-        status,
-        message,
-      },
-    });
-  }
-};
-
-export const getAlbumByIdController = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
-  try {
-    const album = await getAlbumByIdModel(id);
+    const album = await getAlbumsModel(album_id);
 
     if (!album) {
-      const status = 404;
-      const message = 'Album not found';
-      return res.status(status).json({
+      return res.status(404).json({
         error: {
-          status,
-          message,
+          status: 404,
+          message: `Album not found`,
         },
       });
     }
 
-    res.status(200).json({
-      album_type: album.type,
-      total_tracks: 11,
-      id: album.id,
-      images: album.images,
-      name: album.name,
-      release_date: album.release_date,
-      genres: album.genres.map((genre) => genre.name),
-      artists: album.artists,
-      tracks: album.tracks,
+    if (album.artists[0].id !== user.id) {
+      return res.status(403).json({
+        error: {
+          status: 403,
+          message: `You can't update a album that you don't own`,
+        },
+      });
+    }
+
+    images.map((image: any) => {
+      const image_id = randomUUID();
+      image.id = image_id;
+
+      // check file extension of base64 string
+      var type = image.file.split(';')[0].split('/')[1];
+
+      if (
+        type !== 'png' &&
+        type !== 'jpg' &&
+        type !== 'jpeg' &&
+        type !== 'gif' &&
+        type !== 'webp'
+      ) {
+        return res.status(400).json({
+          message: 'invalid file type',
+        });
+      }
+
+      const FOLDER = `public/users/${user.id}/albums/${album_id}/images`;
+
+      // check if folder exists, if not create it
+      if (!fs.existsSync(FOLDER)) {
+        fs.mkdirSync(FOLDER, { recursive: true });
+      }
+
+      // convert base64 string file to buffer
+      const buffer = Buffer.from(image.file.split(';base64,').pop(), 'base64');
+      // const decodedString = buffer.toString('utf-8');
+
+      const dimension = imageSize(buffer);
+      const width = dimension.width;
+      const height = dimension.height;
+      image.width = width;
+      image.height = height;
+
+      const upload = fs.writeFile(
+        `${FOLDER}/${image_id}.${type}`,
+        buffer,
+        { encoding: 'base64' },
+        (err) => {}
+      );
+      image.file = `${FOLDER}/${image_id}.${type}`;
     });
+
+    const updatedAlbum = await uploadAlbumsImagesModel(album_id, images);
+
+    return res.status(200).json({ updatedAlbum });
   } catch (error: any) {
-    const status = error.status || 500;
-    const message = error.message || 'Internal server error';
-    res.status(status).json({
+    return res.status(500).json({
       error: {
-        status,
-        message,
+        status: 500,
+        message: error.message,
       },
     });
   }
 };
 
-export const updateAlbumByIdController = async (
-  req: Request,
-  res: Response
-) => {
-  const { id } = req.params;
-  const { name, release_date, type, published } = req.body;
-
+export const removeAlbumsTracksController = async (req: any, res: any) => {
   try {
-    const album = await updateAlbumByIdModel(
-      id,
-      name,
-      release_date,
-      type,
-      published
-    );
-    res.status(200).json(album);
+    const { album_id } = req.params;
+    const { tracks, user } = req.body;
+
+    const album = await getAlbumsModel(album_id);
+
+    if (!album) {
+      return res.status(404).json({
+        error: {
+          status: 404,
+          message: `Album not found`,
+        },
+      });
+    }
+
+    if (album.artists[0].id !== user.id) {
+      return res.status(403).json({
+        error: {
+          status: 403,
+          message: `You can't update a album that you don't own`,
+        },
+      });
+    }
+    const updatedAlbum = await removeAlbumsTracksModel(album_id, tracks);
+
+    tracks.map(async (track: any) => {
+      const FOLDER = `public/users/${user.id}/albums/${album_id}/tracks`;
+      const files = fs.readdirSync(FOLDER);
+      files.map((file: any) => {
+        if (file.startsWith(track)) {
+          fs.unlink(`${FOLDER}/${file}`, (err) => {
+            if (err) {
+              console.error(err);
+              return;
+            }
+          });
+        }
+      });
+    });
+
+    return res.status(200).json({ updatedAlbum });
   } catch (error: any) {
-    const status = error.status || 500;
-    const message = error.message || 'Internal server error';
-    res.status(status).json({
+    return res.status(500).json({
       error: {
-        status,
-        message,
+        status: 500,
+        message: error.message,
       },
     });
   }
 };
 
-export const deleteAlbumByIdController = async (
-  req: Request,
-  res: Response
-) => {
-  const { id } = req.params;
-
+export const removeAlbumsImagesController = async (req: any, res: any) => {
   try {
-    const album = await deleteAlbumByIdModel(id);
-    res.status(200).json(album);
-  } catch (error: any) {
-    const status = error.status || 500;
-    const message = error.message || 'Internal server error';
-    res.status(status).json({
-      error: {
-        status,
-        message,
-      },
+    const { album_id } = req.params;
+    const { images, user } = req.body;
+
+    const album = await getAlbumsModel(album_id);
+
+    if (!album) {
+      return res.status(404).json({
+        error: {
+          status: 404,
+          message: `Album not found`,
+        },
+      });
+    }
+
+    if (album.artists[0].id !== user.id) {
+      return res.status(403).json({
+        error: {
+          status: 403,
+          message: `You can't update a album that you don't own`,
+        },
+      });
+    }
+    const updatedAlbum = await removeAlbumsImagesModel(album_id, images);
+
+    images.map(async (image: any) => {
+      const FOLDER = `public/users/${user.id}/albums/${album_id}/images`;
+      const files = fs.readdirSync(FOLDER);
+      files.map((file: any) => {
+        if (file.startsWith(image)) {
+          fs.unlink(`${FOLDER}/${file}`, (err) => {
+            if (err) {
+              console.error(err);
+              return;
+            }
+          });
+        }
+      });
     });
-  }
-};
 
-export const deleteAllAlbumsController = async (
-  req: Request,
-  res: Response
-) => {
-  try {
-    const albums = await deleteAllAlbumsModel();
-    res.status(200).json(albums);
+    return res.status(200).json({ updatedAlbum });
   } catch (error: any) {
-    const status = error.status || 500;
-    const message = error.message || 'Internal server error';
-    res.status(status).json({
+    return res.status(500).json({
       error: {
-        status,
-        message,
+        status: 500,
+        message: error.message,
       },
     });
   }

@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import { randomUUID } from 'crypto';
 import { Request, Response } from 'express';
 
 import {
@@ -198,7 +198,7 @@ export const register = async (req: Request, res: Response) => {
     }
 
     const hashed_password = await encryptPassword(password);
-    const id = crypto.randomBytes(22).toString('hex');
+    const id = randomUUID();
 
     const new_user = await createUserModel(
       id,
@@ -289,22 +289,6 @@ export const login = async (req: Request, res: Response) => {
 
     const accessToken = generateAccessToken(user.id, user.role);
     const refreshToken = generateRefreshToken(user.id, user.role);
-
-    // res.cookie('refreshToken', refreshToken, {
-    //   httpOnly: true,
-    //   secure: true,
-    //   sameSite: 'lax',
-    //   domain: 'muse.com',
-    //   expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
-    // });
-
-    // res.cookie('accessToken', accessToken, {
-    //   httpOnly: true,
-    //   secure: true,
-    //   sameSite: 'lax',
-    //   domain: 'muse.com',
-    //   expires: new Date(Date.now() + 1000 * 60 * 60),
-    // });
 
     return res.status(200).json({
       accessToken,

@@ -1,47 +1,62 @@
-import { Router } from 'express';
+import { type Router } from 'express';
 import {
-  createAlbumController,
-  deleteAlbumByIdController,
-  deleteAllAlbumsController,
-  getAlbumByIdController,
+  createAlbumsTracksController,
   getAlbumsController,
-  updateAlbumByIdController,
+  getAlbumsTracksController,
+  getSeveralAlbumsController,
+  removeAlbumsImagesController,
+  removeAlbumsTracksController,
+  updateAlbumDetailsController,
+  uploadAlbumsImagesController,
 } from '../controllers';
 import { authorize, isAuthenticated } from '../middlewares';
 
 export default (router: Router) => {
-  router.get('/albums/', getAlbumsController);
-  router.get('/albums/:id', getAlbumByIdController);
+  // Get an Album
+  router.get('/albums/:album_id', getAlbumsController);
+
+  // Get Multiple Albums
+  router.get('/albums', getSeveralAlbumsController);
+
+  // Get an Album's Tracks
+  router.get('/albums/:album_id/tracks', getAlbumsTracksController);
+
+  // Update Album Details
+  router.put(
+    '/albums/:album_id',
+    isAuthenticated,
+    updateAlbumDetailsController
+  );
+
+  // Create a Track
   router.post(
-    '/albums/',
+    '/albums/:album_id/tracks',
     isAuthenticated,
     authorize('ARTIST'),
-    createAlbumController
+    createAlbumsTracksController
   );
-  // router.get('/albums/:albumId/tracks', );
-  // router.get('/albums/:albumId/tracks/:trackId', );
-  // router.post('/albums/:albumId/artists', );
-  // router.post('/albums/:albumId/artists/:artistId', );
-  // router.post('/albums/:albumId/images', );
-  // router.post('/albums/:albumId/images/:imageId', );
-  // router.post('/albums/:albumId/genres', );
-  // router.post('/albums/:albumId/genres/:genreId', );
-  router.delete(
-    '/albums/',
-    isAuthenticated,
-    authorize('SUPERADMIN'),
-    deleteAllAlbumsController
-  );
-  router.delete(
-    '/albums/:id',
-    isAuthenticated,
-    authorize('ARTIST', 'ADMIN', 'SUPERADMIN'),
-    deleteAlbumByIdController
-  );
+
+  // Upload a Custom Album Cover Image
   router.put(
-    '/albums/:id',
+    '/albums/:album_id/images',
     isAuthenticated,
-    authorize('ARTIST', 'MODERATOR', 'ADMIN', 'SUPERADMIN'),
-    updateAlbumByIdController
+    authorize('ARTIST'),
+    uploadAlbumsImagesController
+  );
+
+  // Remove Albums Tracks
+  router.delete(
+    '/albums/:album_id/tracks',
+    isAuthenticated,
+    authorize('ARTIST'),
+    removeAlbumsTracksController
+  );
+
+  // Remove Albums Images
+  router.delete(
+    '/albums/:album_id/images',
+    isAuthenticated,
+    authorize('ARTIST'),
+    removeAlbumsImagesController
   );
 };

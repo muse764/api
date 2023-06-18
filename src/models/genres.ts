@@ -2,56 +2,33 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export const createGenreModel = async (
-  id: string,
-  name: string,
-  active: boolean
-) => {
-  return await prisma.genre.create({
-    data: {
-      id,
-      name,
-      active,
-    },
-  });
-};
-
-export const getAllGenresModel = async () => {
-  return await prisma.genre.findMany();
-};
-
-export const getGenreByIdModel = async (id: string) => {
-  return await prisma.genre.findUnique({
+export const getAlbumsModel = async (genre_id: string) =>
+  await prisma.album.findUnique({
     where: {
-      id,
+      id: genre_id,
     },
   });
-};
 
-export const updateGenreByIdModel = async (
-  id: string,
-  name: string,
-  active: boolean
-) => {
-  return await prisma.genre.update({
+export async function getSeveralAlbumsModel(ids: string[]): Promise<{}[]>;
+export async function getSeveralAlbumsModel(
+  limit: number,
+  offset: number
+): Promise<{}[]>;
+export async function getSeveralAlbumsModel(
+  idsOrLimit: string[] | number,
+  offset?: number
+): Promise<{}[]> {
+  if (typeof idsOrLimit === 'number') {
+    return await prisma.album.findMany({
+      take: idsOrLimit,
+      skip: offset,
+    });
+  }
+  return await prisma.album.findMany({
     where: {
-      id,
-    },
-    data: {
-      name,
-      active,
+      id: {
+        in: idsOrLimit,
+      },
     },
   });
-};
-
-export const deleteGenreByIdModel = async (id: string) => {
-  return await prisma.genre.delete({
-    where: {
-      id,
-    },
-  });
-};
-
-export const deleteAllGenresModel = async () => {
-  return await prisma.genre.deleteMany();
-};
+}

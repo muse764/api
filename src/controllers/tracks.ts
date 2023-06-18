@@ -1,146 +1,134 @@
-import { Request, Response } from 'express';
-
-import crypto from 'crypto';
-import fs from 'fs';
-import getAudioDurationInSeconds from 'get-audio-duration';
 import {
-  createTrackModel,
-  getAllTracksModel,
-  getTrackByIdModel,
+  getSeveralTracksModel,
+  getTracksModel,
+  updateTrackDetailsModel,
 } from '../models';
 
-export const createTrackController = async (req: Request, res: Response) => {
-  const { name, file, track_number, albumId, artists, user } = req.body;
-
-  if (!name) {
-    const status = 400;
-    const message = 'Name is required';
-    res.status(status).json({
-      error: {
-        status,
-        message,
-      },
-    });
-    return;
-  }
-
-  const id = crypto.randomBytes(16).toString('hex');
-  const main = {
-    artistId: user.id,
-    role: 'MAIN',
-  };
-
-  artists.push(main);
-
+export const getTracksController = async (req: any, res: any) => {
   try {
-    // check file extension of base64 string
-    var type = file.split(';')[0].split('/')[1];
+    const { track_id } = req.params;
+    const track = await getTracksModel(track_id);
 
-    if (
-      type !== 'mp3' &&
-      type !== 'wav' &&
-      type !== 'opus' &&
-      type !== 'webm'
-    ) {
-      return res.status(400).json({
-        message: 'invalid file type',
+    if (!track) {
+      const status = 404;
+      const message = `Track not found`;
+      return res.status(status).json({
+        error: {
+          status,
+          message,
+        },
       });
     }
 
-    // convert base64 string file to buffer
-    const buffer = Buffer.from(file.split(';base64,').pop(), 'base64');
-    // const decodedString = buffer.toString('utf-8');
-
-    const id = crypto.randomBytes(16).toString('hex');
-
-    const FOLDER = `public/users/${user.id}/albums/${albumId}/tracks`;
-
-    // check if folder exists, if not create it
-    if (!fs.existsSync(FOLDER)) {
-      fs.mkdirSync(FOLDER, { recursive: true });
-    }
-
-    const upload = fs.writeFileSync(`${FOLDER}/${id}.${type}`, buffer, {
-      encoding: 'base64',
-    });
-
-    const duration = await getAudioDurationInSeconds(`${FOLDER}/${id}.${type}`);
-
-    const ntrack_number = parseInt(track_number);
-
-    // check if folder exists and f it does not exists create it
-
-    const track = await createTrackModel(
-      id,
-      name,
-      `${FOLDER}/${id}.${type}`,
-      duration,
-      ntrack_number,
-      albumId,
-      artists
-    );
-    res.status(201).json(track);
+    return res.status(200).json(track);
   } catch (error: any) {
-    const status = error.status || 500;
-    const message = error.message || 'Internal server error';
-    res.status(status).json({
+    return res.status(500).json({
       error: {
-        status,
-        message,
+        status: 500,
+        message: error.message,
       },
     });
   }
 };
 
-export const getAllTracksController = async (req: Request, res: Response) => {
+export const getSeveralTracksController = async (req: any, res: any) => {
   try {
-    const { limit, offset } = req.query;
+    const { ids, limit, offset } = req.query;
 
-    var tracks;
+    if (
+      (limit && offset && ids) ||
+      (limit && !offset && ids) ||
+      (!limit && offset && ids)
+    ) {
+      return res.status(400).json({
+        error: {
+          status: 400,
+          message: `You can't use limit, offset and ids at the same time`,
+        },
+      });
+    }
+
+    if (!limit && !offset && !ids) {
+      return res.status(400).json({
+        error: {
+          status: 400,
+          message: `You must use limit, offset or ids`,
+        },
+      });
+    }
+
+    if ((limit && !offset) || (!limit && offset)) {
+      return res.status(400).json({
+        error: {
+          status: 400,
+          message: `You must use limit and offset at the same time`,
+        },
+      });
+    }
 
     if (limit && offset) {
-      tracks = await getAllTracksModel(Number(limit), Number(offset));
+      const tracks = await getSeveralTracksModel(Number(limit), Number(offset));
+      return res.status(200).json({ tracks });
     }
 
-    if (limit && !offset) {
-      tracks = await getAllTracksModel(Number(limit), 0);
-    }
+    if (ids) {
+      const idsArray = (ids as string).split(',');
 
-    if (!limit && offset) {
-      tracks = await getAllTracksModel(20, Number(offset));
+      const tracks = await getSeveralTracksModel(idsArray);
+      return res.status(200).json({ tracks });
     }
-
-    if (!limit && !offset) {
-      tracks = await getAllTracksModel(Number(limit) | 20, Number(offset) | 0);
-    }
-    res.status(200).json({ tracks });
   } catch (error: any) {
-    const status = error.status || 500;
-    const message = error.message || 'Internal server error';
-    res.status(status).json({
+    return res.status(500).json({
       error: {
-        status,
-        message,
+        status: 500,
+        message: error.message,
       },
     });
   }
 };
 
-export const getAllTrackByIdController = async (
-  req: Request,
-  res: Response
-) => {
+export const updateTrackController = async (req: any, res: any) => {
   try {
-    const { id } = req.params;
-    const track = await getTrackByIdModel(id);
-    res.status(200).json({ track });
+    const { track_id } = req.params;
+    const { name, albumId, file, duration, track_number, user } = req.body;
+
+    const track = await getTracksModel(track_id);
+
+    console.log(name);
+
+    if (!track) {
+      return res.status(404).json({
+        error: {
+          status: 404,
+          message: `Album not found`,
+        },
+      });
+    }
+
+    if (track?.artists[0].id !== user.id) {
+      return res.status(403).json({
+        error: {
+          status: 403,
+          message: `You can't update a track that you don't own`,
+        },
+      });
+    }
+
+    const updatedTrack = await updateTrackDetailsModel(
+      track_id,
+      name,
+      albumId,
+      file,
+      duration,
+      track_number
+    );
+
+    return res.status(200).json(updatedTrack);
   } catch (error: any) {
-    const status = error.status || 500;
-    const message = error.message || 'Internal server error';
-    res.status(status).json({
+    return res.status(500).json({
       error: {
-        status,
-        message,
+        status: 500,
+        message: error.message,
       },
     });
   }

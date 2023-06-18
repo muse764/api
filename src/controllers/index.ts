@@ -1,85 +1,85 @@
 import {
-  createAlbumController,
-  deleteAlbumByIdController,
-  deleteAllAlbumsController,
-  getAlbumByIdController,
+  createAlbumsTracksController,
   getAlbumsController,
-  updateAlbumByIdController,
+  getAlbumsTracksController,
+  getSeveralAlbumsController,
+  updateAlbumDetailsController,
+  uploadAlbumsImagesController,
+  removeAlbumsTracksController,
+  removeAlbumsImagesController,
 } from './albums';
-import { getAllArtists, getSingleArtist } from './artists';
+import {
+  createArtistsAlbumsController,
+  getArtistsAlbumsController,
+  getArtistsController,
+  getArtistsTracksController,
+  getSeveralArtistsController,
+} from './artists';
 import { login, register } from './authentication';
 import {
-  createUserController,
-  deleteSingleUserController,
-  getAllUsersController,
-  getSingleUserController,
-  updateSingleUserController,
-} from './users';
+  getCurrentUsersAlbumsController,
+  getCurrentUsersPlaylistsController,
+  getCurrentUsersProfileController,
+  getCurrentUsersTracksController,
+} from './me';
 import {
-  createGenreController,
-  deleteAllGenresController,
-  deleteGenreByIdController,
-  getAllGenresController,
-  getGenreByIdController,
-  updateGenreByIdController,
-} from './genres';
+  addPlaylistsTracksController,
+  getPlaylistController,
+  getPlaylistsTracksController,
+  getSeveralPlaylistsController,
+  removePlaylistsTracksController,
+  updatePlaylistDetailsController,
+  uploadPlaylistsImagesController,
+  removePlaylistsImagesController,
+} from './playlists';
 import {
-  createImageController,
-  deleteImageController,
-  getImagesController,
-  getImageByIdController,
-} from './images';
-import { getLoggedinUser } from './me';
-import {
-  createTrackController,
-  getAllTracksController,
-  getAllTrackByIdController,
+  getSeveralTracksController,
+  getTracksController,
+  updateTrackController,
 } from './tracks';
+import {
+  createUsersPlaylistController,
+  getSeveralUsersController,
+  getUsersPlaylistsController,
+  getUsersProfileController,
+  updateUsersProfileController,
+  uploadUsersImagesController,
+} from './users';
 export {
-  // AUTH
+  removePlaylistsImagesController,
+  removeAlbumsImagesController,
+  removeAlbumsTracksController,
+  uploadAlbumsImagesController,
+  addPlaylistsTracksController,
+  createAlbumsTracksController,
+  createArtistsAlbumsController,
+  createUsersPlaylistController,
+  getAlbumsController,
+  getAlbumsTracksController,
+  getArtistsAlbumsController,
+  getArtistsController,
+  getArtistsTracksController,
+  getCurrentUsersAlbumsController,
+  getCurrentUsersPlaylistsController,
+  getCurrentUsersProfileController,
+  getCurrentUsersTracksController,
+  getPlaylistController,
+  getPlaylistsTracksController,
+  getSeveralAlbumsController,
+  getSeveralArtistsController,
+  getSeveralPlaylistsController,
+  getSeveralTracksController,
+  getSeveralUsersController,
+  getTracksController,
+  getUsersPlaylistsController,
+  getUsersProfileController,
   login,
   register,
-
-  // ALBUMS
-  createAlbumController,
-  deleteAlbumByIdController,
-  deleteAllAlbumsController,
-  getAlbumByIdController,
-  getAlbumsController,
-  updateAlbumByIdController,
-  // ARTISTS
-  getAllArtists,
-  getSingleArtist,
-
-  // GENRES
-  createGenreController,
-  deleteAllGenresController,
-  deleteGenreByIdController,
-  getAllGenresController,
-  getGenreByIdController,
-  updateGenreByIdController,
-
-  // IMAGE
-  createImageController,
-  deleteImageController,
-  getImagesController,
-  getImageByIdController,
-
-  // ME
-  getLoggedinUser,
-
-  // PLAYLISTS
-  // SEARCH
-
-  // TRACKS
-  createTrackController,
-  getAllTracksController,
-  getAllTrackByIdController,
-
-  // USERS
-  createUserController,
-  getAllUsersController,
-  getSingleUserController,
-  updateSingleUserController,
-  deleteSingleUserController,
+  removePlaylistsTracksController,
+  updateAlbumDetailsController,
+  updatePlaylistDetailsController,
+  updateTrackController,
+  updateUsersProfileController,
+  uploadPlaylistsImagesController,
+  uploadUsersImagesController,
 };

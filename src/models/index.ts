@@ -1,89 +1,87 @@
 import {
-  createAlbumModel,
-  deleteAlbumByIdModel,
-  deleteAllAlbumsModel,
-  getAlbumByIdModel,
-  getAllAlbumsModel,
-  updateAlbumByIdModel,
+  getAlbumsModel,
+  getAlbumsTracksModel,
+  getSeveralAlbumsModel,
+  updateAlbumDetailsModel,
+  createAlbumsTracksModel,
+  uploadAlbumsImagesModel,
+  removeAlbumsTracksModel,
+  removeAlbumsImagesModel,
 } from './albums';
-import { getArtistById, getArtists } from './artists';
 import {
-  createGenreModel,
-  deleteAllGenresModel,
-  deleteGenreByIdModel,
-  getAllGenresModel,
-  getGenreByIdModel,
-  updateGenreByIdModel,
-} from './genres';
+  getArtistsModel,
+  getSeveralArtistsModel,
+  getArtistsAlbumsModel,
+  getArtistsTracksModel,
+  createArtistsAlbumsModel,
+} from './artists';
 import {
-  createImageModel,
-  deleteImageByIdModel,
-  getAllImagesModel,
-  getImageByIdModel,
-  updateImageByIdModel,
-} from './images';
+  getCurrentUsersAlbumsModel,
+  getCurrentUsersPlaylistsModel,
+  getCurrentUsersProfileModel,
+  getCurrentUsersTracksModel,
+} from './me';
 import {
-  createTrackModel,
-  deleteTrackModel,
-  getAllTracksModel,
-  getTrackByIdModel,
-  updateTrackModel,
+  addPlaylistsTracksModel,
+  getPlaylistModel,
+  getPlaylistsTracksModel,
+  getSeveralPlaylistsModel,
+  removePlaylistsTracksModel,
+  updatePlaylistDetailsModel,
+  uploadPlaylistsImagesModel,
+  removePlaylistsImagesModel,
+} from './playlists';
+import {
+  getSeveralTracksModel,
+  getTracksModel,
+  updateTrackDetailsModel,
 } from './tracks';
 import {
   createUserModel,
-  deleteAllUsersModel,
-  deleteUserByIdModel,
+  createUsersPlaylistModel,
+  getSeveralUsersModel,
   getUserByEmailModel,
-  getUserByIdModel,
-  getUserByUsernameModel,
-  getUsersModel,
-  updateUserByIdModel,
+  getUsersPlaylistsModel,
+  getUsersProfileModel,
+  updateUsersProfileModel,
+  uploadUsersImagesModel,
 } from './users';
 
 export {
-  // ALBUMS
-  createAlbumModel,
-  deleteAlbumByIdModel,
-  deleteAllAlbumsModel,
-  getAllAlbumsModel,
-  getAlbumByIdModel,
-  updateAlbumByIdModel,
-
-  // ARTISTS
-  getArtistById,
-  getArtists,
-
-  // GENRES
-  createGenreModel,
-  deleteAllGenresModel,
-  deleteGenreByIdModel,
-  getAllGenresModel,
-  getGenreByIdModel,
-  updateGenreByIdModel,
-
-  // IMAGES
-  createImageModel,
-  deleteImageByIdModel,
-  getAllImagesModel,
-  getImageByIdModel,
-  updateImageByIdModel,
-
-  // PLAYLISTS
-
-  // TRACKS
-  createTrackModel,
-  deleteTrackModel,
-  getAllTracksModel,
-  getTrackByIdModel,
-  updateTrackModel,
-
-  // USERS
+  removePlaylistsImagesModel,
+  removeAlbumsImagesModel,
+  removeAlbumsTracksModel,
+  uploadAlbumsImagesModel,
+  createAlbumsTracksModel,
+  createArtistsAlbumsModel,
+  getArtistsTracksModel,
+  getArtistsAlbumsModel,
+  addPlaylistsTracksModel,
   createUserModel,
-  deleteUserByIdModel,
-  deleteAllUsersModel,
+  createUsersPlaylistModel,
+  getAlbumsModel,
+  getAlbumsTracksModel,
+  getArtistsModel,
+  getCurrentUsersAlbumsModel,
+  getCurrentUsersPlaylistsModel,
+  getCurrentUsersProfileModel,
+  getCurrentUsersTracksModel,
+  getPlaylistModel,
+  getPlaylistsTracksModel,
+  getSeveralAlbumsModel,
+  getSeveralArtistsModel,
+  getSeveralPlaylistsModel,
+  getSeveralTracksModel,
+  getSeveralUsersModel,
+  getTracksModel,
   getUserByEmailModel,
-  getUserByIdModel,
-  getUserByUsernameModel,
-  getUsersModel,
-  updateUserByIdModel,
+  getUsersPlaylistsModel,
+  getUsersProfileModel,
+  removePlaylistsTracksModel,
+  updateAlbumDetailsModel,
+  updatePlaylistDetailsModel,
+  updateTrackDetailsModel,
+  updateUsersProfileModel,
+  uploadPlaylistsImagesModel,
+  uploadUsersImagesModel,
 };

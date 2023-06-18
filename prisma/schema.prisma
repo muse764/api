@@ -11,19 +11,19 @@ datasource db {
 }
 
 model User {
-  id        String        @id
+  id        String     @id
   full_name String
-  username  String        @unique
-  email     String        @unique
+  username  String     @unique
+  email     String     @unique
   password  String
-  role      UserRole      @default(USER)
-  active    Boolean       @default(true)
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
+  role      UserRole   @default(USER)
+  active    Boolean    @default(true)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
   images    Image[]
   albums    Album[]
   playlists Playlist[]
-  tracks    TrackArtist[]
+  tracks    Track[]
 }
 
 model Album {
@@ -41,16 +41,16 @@ model Album {
 }
 
 model Track {
-  id           String        @id
+  id           String     @id
   name         String
   file         String
   duration     Float
-  published    Boolean       @default(true)
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  artists      TrackArtist[]
+  published    Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  artists      User[]
   albumId      String
-  album        Album         @relation(fields: [albumId], references: [id])
+  album        Album      @relation(fields: [albumId], references: [id])
   track_number Int
   playlists    Playlist[]
 }
@@ -59,6 +59,14 @@ model Genre {
   id        String   @id
   name      String   @unique
   albums    Album[]
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id        String   @id
+  name      String   @unique
   images    Image[]
   active    Boolean  @default(true)
   createdAt DateTime @default(now())
@@ -66,18 +74,17 @@ model Genre {
 }
 
 model Image {
-  id        String     @id
-  file      String
-  width     Int
-  height    Int
-  albums    Album[]
-  playlists Playlist[]
-  genres    Genre[]
-  userId    String
-  user      User       @relation(fields: [userId], references: [id])
-  published Boolean    @default(true)
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  id         String     @id
+  file       String
+  width      Int
+  height     Int
+  albums     Album[]
+  playlists  Playlist[]
+  users      User[]
+  categories Category[]
+  published  Boolean    @default(true)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
 }
 
 model Playlist {
@@ -93,27 +100,12 @@ model Playlist {
   updatedAt   DateTime @updatedAt
 }
 
-model TrackArtist {
-  track    Track      @relation(fields: [trackId], references: [id])
-  trackId  String
-  role     ArtistRole @default(MAIN)
-  artist   User       @relation(fields: [artistId], references: [id])
-  artistId String
-
-  @@unique([trackId, artistId])
-}
-
 enum UserRole {
   USER
   ARTIST
   MODERATOR
   ADMIN
   SUPERADMIN
-}
-
-enum ArtistRole {
-  MAIN
-  FEATURE
 }
 
 enum AlbumType {

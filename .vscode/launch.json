@@ -28,6 +28,20 @@
       "name": "dev",
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["dev"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Prisma Studio",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["prisma:studio"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Prisma Generate",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["prisma:generate"]
     }
   ]
 }

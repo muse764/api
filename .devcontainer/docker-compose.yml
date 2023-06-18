@@ -20,10 +20,5 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_DB: muse
 
-  adminer:
-    image: adminer:latest
-    restart: unless-stopped
-    network_mode: service:db
-
 volumes:
   postgres-data:

@@ -1,13 +1,31 @@
-import { Router } from 'express';
-import { getAllArtists, getSingleArtist } from '../controllers';
+import { type Router } from 'express';
+import {
+  createArtistsAlbumsController,
+  getArtistsAlbumsController,
+  getArtistsController,
+  getArtistsTracksController,
+  getSeveralArtistsController,
+} from '../controllers';
+import { authorize, isAuthenticated } from '../middlewares';
 
 export default (router: Router) => {
-  router.get('/artists', getAllArtists);
-  router.get('/artists/:id', getSingleArtist);
-  // router.get('/artists/:artistId/albums', );
-  // router.get('/artists/:artistId/albums/:albumId', );
-  // router.get('/artists/:artistId/tracks', );
-  // router.get('/artists/:artistId/tracks/:trackId', );
-  // router.get('/artists/:artistId/images', );
-  // router.get('/artists/:artistId/images/:imageId', );
+  // Get an Artist
+  router.get('/artists/:artist_id', getArtistsController);
+
+  // Get Multiple Artists
+  router.get('/artists', getSeveralArtistsController);
+
+  // Get an Artist's Albums
+  router.get('/artists/:artist_id/albums', getArtistsAlbumsController);
+
+  // Get an Artist's Tracks
+  router.get('/artists/:artist_id/albums', getArtistsTracksController);
+
+  // Create an Album
+  router.post(
+    '/artists/:artist_id/albums',
+    isAuthenticated,
+    authorize('ARTIST'),
+    createArtistsAlbumsController
+  );
 };

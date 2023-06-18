@@ -1,43 +1,39 @@
 import { type Router } from 'express';
 
 import {
-  createUserController,
-  deleteSingleUserController,
-  getAllUsersController,
-  getSingleUserController,
-  updateSingleUserController,
+  createUsersPlaylistController,
+  getSeveralUsersController,
+  getUsersPlaylistsController,
+  getUsersProfileController,
+  updateUsersProfileController,
+  uploadUsersImagesController,
 } from '../controllers';
 import { authorize, isAuthenticated } from '../middlewares';
 
 export default (router: Router) => {
-  router.get(
-    '/users',
-    isAuthenticated,
-    authorize('ADMIN', 'MODERATOR', 'SUPERADMIN'),
-    getAllUsersController
-  );
-  router.get(
-    '/users/:id',
-    isAuthenticated,
-    authorize('ADMIN', 'MODERATOR', 'SUPERADMIN'),
-    getSingleUserController
-  );
+  // Get Several Users
+  router.get('/users', getSeveralUsersController);
+
+  // Get a User's Profile
+  router.get('/users/:user_id', getUsersProfileController);
+
+  // Update a User's Profile
+  router.put('/users/:user_id', isAuthenticated, updateUsersProfileController);
+
+  // Get a User's Playlists
+  router.get('/users/:user_id/playlists', getUsersPlaylistsController);
+
+  // Create a Playlist
   router.post(
-    '/users',
+    '/users/:user_id/playlists',
     isAuthenticated,
-    authorize('ADMIN', 'SUPERADMIN'),
-    createUserController
+    createUsersPlaylistController
   );
+
+  // Upload a Custom user Image
   router.put(
-    '/users/:id',
+    '/users/:user_id/images',
     isAuthenticated,
-    authorize('ADMIN', 'MODERATOR', 'SUPERADMIN'),
-    updateSingleUserController
-  );
-  router.delete(
-    '/users/:id',
-    isAuthenticated,
-    authorize('ADMIN', 'SUPERADMIN'),
-    deleteSingleUserController
+    uploadUsersImagesController
   );
 };

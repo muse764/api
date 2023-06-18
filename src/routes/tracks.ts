@@ -1,21 +1,18 @@
 import { type Router } from 'express';
 import {
-  createTrackController,
-  getAllTrackByIdController,
-  getAllTracksController,
+  getSeveralTracksController,
+  getTracksController,
+  updateTrackController,
 } from '../controllers';
-import { authorize, isAuthenticated } from '../middlewares';
+import { isAuthenticated } from '../middlewares';
 
 export default (router: Router) => {
-  router.get('/tracks', getAllTracksController);
-  router.get('/tracks/:id', getAllTrackByIdController);
-  router.post(
-    '/tracks',
-    isAuthenticated,
-    authorize('ARTIST'),
-    createTrackController
-  );
-  // router.delete('/tracks', isAuthenticated, authorize('SUPERADMIN'), )
-  // router.delete('/tracks/:id', isAuthenticated, authorize('ARTIST'), )
-  // router.put('/tracks', isAuthenticated, authorize('ARTIST', 'MODERATOR, 'ADMIN', 'SUPERADMIN'), )
+  // Get a Track
+  router.get('/tracks/:track_id', getTracksController);
+
+  // Get Multiple Tracks
+  router.get('/tracks', getSeveralTracksController);
+
+  // Update Track Details
+  router.put('/tracks/:track_id', isAuthenticated, updateTrackController);
 };
