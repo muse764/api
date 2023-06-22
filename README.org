@@ -5,6 +5,7 @@
   - [[#-live-demo][🚀 Live Demo]]
   - [[#-getting-started][💻 Getting Started]]
 - [[#-authors][👥 Authors]]
+  - [[#mubarek-seid-juhar][Mubarek Seid Juhar]]
 - [[#-faq][❓ FAQ]]
 - [[#-license][📝 License]]
 
@@ -22,18 +23,41 @@
 
 *** 📝 Prerequisites
 
-- Node.js
-- PostgreSQL
+- [[https://nodejs.org/en][Node.js]]
+- [[https://www.postgresql.org/][PostgreSQL]]
+- [[https://www.docker.com/][Docker]]
+- [[https://github.com/devcontainers/cli][Devcontainer]]
 
 *** 📝 Setup
 
 **** Local
 
 **** Docker
+#+BEGIN_SRC shell
+git clone https://github.com/muse764/api
+#+END_SRC
+
+#+BEGIN_SRC shell
+cd api
+#+END_SRC
+
+#+BEGIN_SRC shell
+devcontainer up --workspace-folder .
+#+END_SRC
+
+#+BEGIN_SRC shell
+devcontainer exec --workspace-folder . pnpm migrate:dev
+#+END_SRC
+
+#+BEGIN_SRC shell
+devcontainer exec --workspace-folder . pnpm dev
+#+END_SRC
 
 *** 📝 Usage
 
 * 👥 Authors
+
+** Mubarek Seid Juhar
 
 * ❓ FAQ
 
