@@ -8,6 +8,7 @@ import {
   getSeveralUsersModel,
   getUsersPlaylistsModel,
   getUsersProfileModel,
+  removeUsersPlaylistsModel,
   updateUsersProfileModel,
   uploadUsersImagesModel,
 } from '../models';
@@ -283,6 +284,37 @@ export const updateUsersProfileController = async (
       password
     );
     return res.status(200).json(profile);
+  } catch (error: any) {
+    return res.status(500).json({
+      error: {
+        status: 500,
+        message: error.message,
+      },
+    });
+  }
+};
+
+export const removeUsersPlaylistsController = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { user_id, playlist_id } = req.params;
+    const { playlists, user } = req.body;
+
+    if (user_id !== user.id) {
+      const status = 403;
+      const message = `You can't delete a playlist for another user`;
+      return res.status(status).json({
+        error: {
+          status,
+          message,
+        },
+      });
+    }
+
+    const playlist = await removeUsersPlaylistsModel(user_id, playlists);
+    return res.status(200).json(playlist);
   } catch (error: any) {
     return res.status(500).json({
       error: {

@@ -189,3 +189,20 @@ export const updateUsersProfileModel = async (
       password,
     },
   });
+
+export const removeUsersPlaylistsModel = async (
+  user_id: string,
+  playlists: string[]
+) =>
+  await prisma.user.update({
+    where: {
+      id: user_id,
+    },
+    data: {
+      playlists: {
+        delete: playlists.map((playlist_id) => ({
+          id: playlist_id,
+        })),
+      },
+    },
+  });

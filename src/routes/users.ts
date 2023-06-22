@@ -7,6 +7,7 @@ import {
   getUsersProfileController,
   updateUsersProfileController,
   uploadUsersImagesController,
+  removeUsersPlaylistsController,
 } from '../controllers';
 import { authorize, isAuthenticated } from '../middlewares';
 
@@ -28,6 +29,13 @@ export default (router: Router) => {
     '/users/:user_id/playlists',
     isAuthenticated,
     createUsersPlaylistController
+  );
+
+  // Delete a playlist
+  router.delete(
+    '/users/:user_id/playlists',
+    isAuthenticated,
+    removeUsersPlaylistsController
   );
 
   // Upload a Custom user Image

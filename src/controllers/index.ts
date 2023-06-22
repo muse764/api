@@ -67,8 +67,10 @@ import {
   getUsersProfileController,
   updateUsersProfileController,
   uploadUsersImagesController,
+  removeUsersPlaylistsController,
 } from './users';
 export {
+  removeUsersPlaylistsController,
   addTracksArtistsController,
   removeTracksArtistsController,
   removeArtistsAlbumsController,

@@ -68,9 +68,11 @@ import {
   getUsersProfileModel,
   updateUsersProfileModel,
   uploadUsersImagesModel,
+  removeUsersPlaylistsModel,
 } from './users';
 
 export {
+  removeUsersPlaylistsModel,
   addTracksArtistsModel,
   removeTracksArtistsModel,
   removeArtistsAlbumsModel,

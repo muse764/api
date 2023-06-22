@@ -1686,6 +1686,16 @@
             "description": "Created Successfully"
           }
         }
+      },
+      "delete": {
+        "tags": ["Users"],
+        "summary": "Users",
+        "description": "Delete User's Playlist with id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/users/{id}/image": {
@@ -1723,6 +1733,16 @@
             "description": "Updated Successfully"
           }
         }
+      },
+      "delete": {
+        "tags": ["Users"],
+        "summary": "Users",
+        "description": "Delete User's Images with id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     }
   },
