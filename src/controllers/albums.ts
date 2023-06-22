@@ -1,4 +1,5 @@
 import { randomUUID } from 'crypto';
+import { Request, Response } from 'express';
 import fs from 'fs';
 import imageSize from 'image-size';
 import {
@@ -16,7 +17,7 @@ import {
   uploadAlbumsImagesModel,
 } from '../models';
 
-export const getAlbumsController = async (req: any, res: any) => {
+export const getAlbumsController = async (req: Request, res: Response) => {
   try {
     const { album_id } = req.params;
     const album = await getAlbumsModel(album_id);
@@ -43,7 +44,10 @@ export const getAlbumsController = async (req: any, res: any) => {
   }
 };
 
-export const getSeveralAlbumsController = async (req: any, res: any) => {
+export const getSeveralAlbumsController = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const { ids, limit, offset } = req.query;
 
@@ -80,7 +84,12 @@ export const getSeveralAlbumsController = async (req: any, res: any) => {
 
     if (limit && offset) {
       const albums = await getSeveralAlbumsModel(Number(limit), Number(offset));
-      return res.status(200).json({ albums });
+      return res.status(200).json({
+        limit: Number(limit),
+        offset: Number(offset),
+        total: albums.length,
+        albums,
+      });
     }
 
     if (ids) {
@@ -99,7 +108,10 @@ export const getSeveralAlbumsController = async (req: any, res: any) => {
   }
 };
 
-export const getAlbumsTracksController = async (req: any, res: any) => {
+export const getAlbumsTracksController = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const { album_id } = req.params;
     const { limit, offset } = req.query;
@@ -135,14 +147,17 @@ export const getAlbumsTracksController = async (req: any, res: any) => {
   }
 };
 
-export const updateAlbumDetailsController = async (req: any, res: any) => {
+export const updateAlbumDetailsController = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const { album_id } = req.params;
     const { name, release_date, type, user } = req.body;
 
-    const album = await getAlbumsModel(album_id);
+    const userRole = user.role;
 
-    console.log(name);
+    const album = await getAlbumsModel(album_id);
 
     if (!album) {
       return res.status(404).json({
@@ -153,19 +168,21 @@ export const updateAlbumDetailsController = async (req: any, res: any) => {
       });
     }
 
-    const art: any = [];
+    if (userRole === 'ARTIST') {
+      const art: any = [];
 
-    album.artists.map(async (artist: any) => {
-      art.push(artist.id);
-    });
-
-    if (!art.includes(user.id)) {
-      return res.status(403).json({
-        error: {
-          status: 403,
-          message: `You can't update a album that you don't own`,
-        },
+      album.artists.map(async (artist: any) => {
+        art.push(artist.id);
       });
+
+      if (!art.includes(user.id)) {
+        return res.status(403).json({
+          error: {
+            status: 403,
+            message: `You can't update a album that you don't own`,
+          },
+        });
+      }
     }
 
     const updatedAlbum = await updateAlbumDetailsModel(
@@ -186,7 +203,10 @@ export const updateAlbumDetailsController = async (req: any, res: any) => {
   }
 };
 
-export const createAlbumsTracksController = async (req: any, res: any) => {
+export const createAlbumsTracksController = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const { album_id } = req.params;
     const { tracks, user } = req.body;
@@ -230,7 +250,10 @@ export const createAlbumsTracksController = async (req: any, res: any) => {
         type !== 'mp3' &&
         type !== 'wav' &&
         type !== 'opus' &&
-        type !== 'webm'
+        type !== 'webm' &&
+        type !== 'ogg' &&
+        type !== 'aac' &&
+        type !== 'flac'
       ) {
         return res.status(400).json({
           message: 'invalid file type',
@@ -255,6 +278,12 @@ export const createAlbumsTracksController = async (req: any, res: any) => {
         });
       }
 
+      track.artists = {
+        connect: {
+          id: user.id,
+        },
+      };
+
       track.file = FILE;
       track.duration = 0;
       // await getAudioDurationInSeconds(FILE).then((duration) => track.duration = duration);
@@ -262,12 +291,20 @@ export const createAlbumsTracksController = async (req: any, res: any) => {
 
     const track = await createAlbumsTracksModel(album_id, tracks);
     return res.status(201).json(track);
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    return res.status(500).json({
+      error: {
+        status: 500,
+        message: error.message,
+      },
+    });
   }
 };
 
-export const uploadAlbumsImagesController = async (req: any, res: any) => {
+export const uploadAlbumsImagesController = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const { album_id } = req.params;
     const { images, user } = req.body;
@@ -356,7 +393,10 @@ export const uploadAlbumsImagesController = async (req: any, res: any) => {
   }
 };
 
-export const removeAlbumsTracksController = async (req: any, res: any) => {
+export const removeAlbumsTracksController = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const { album_id } = req.params;
     const { tracks, user } = req.body;
@@ -414,7 +454,10 @@ export const removeAlbumsTracksController = async (req: any, res: any) => {
   }
 };
 
-export const removeAlbumsImagesController = async (req: any, res: any) => {
+export const removeAlbumsImagesController = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const { album_id } = req.params;
     const { images, user } = req.body;
@@ -472,7 +515,10 @@ export const removeAlbumsImagesController = async (req: any, res: any) => {
   }
 };
 
-export const addAlbumsGenresController = async (req: any, res: any) => {
+export const addAlbumsGenresController = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const { album_id } = req.params;
     const { genres, user } = req.body;
@@ -516,7 +562,10 @@ export const addAlbumsGenresController = async (req: any, res: any) => {
   }
 };
 
-export const removeAlbumsGenresController = async (req: any, res: any) => {
+export const removeAlbumsGenresController = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const { album_id } = req.params;
     const { genres, user } = req.body;
@@ -560,7 +609,10 @@ export const removeAlbumsGenresController = async (req: any, res: any) => {
   }
 };
 
-export const addAlbumsArtistsController = async (req: any, res: any) => {
+export const addAlbumsArtistsController = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const { album_id } = req.params;
     const { artists, user } = req.body;
@@ -604,7 +656,10 @@ export const addAlbumsArtistsController = async (req: any, res: any) => {
   }
 };
 
-export const removeAlbumsArtistsController = async (req: any, res: any) => {
+export const removeAlbumsArtistsController = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const { album_id } = req.params;
     const { artists, user } = req.body;

@@ -34,7 +34,13 @@ export const getCurrentUsersAlbumsModel = async (user_id: string) =>
       id: user_id,
     },
     select: {
-      albums: true,
+      albums: {
+        include: {
+          tracks: true,
+          artists: true,
+          genres: true,
+        },
+      },
     },
   });
 
@@ -44,6 +50,11 @@ export const getCurrentUsersTracksModel = async (user_id: string) =>
       id: user_id,
     },
     select: {
-      tracks: true,
+      tracks: {
+        include: {
+          album: true,
+          artists: true,
+        },
+      },
     },
   });

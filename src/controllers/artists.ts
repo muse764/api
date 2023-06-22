@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { Request, Response } from 'express';
 import {
   createArtistsAlbumsModel,
@@ -5,8 +6,8 @@ import {
   getArtistsModel,
   getArtistsTracksModel,
   getSeveralArtistsModel,
+  removeArtistsAlbumsModel,
 } from '../models';
-import { randomUUID } from 'crypto';
 
 export const getArtistsController = async (req: Request, res: Response) => {
   try {
@@ -78,7 +79,12 @@ export const getSeveralArtistsController = async (
         Number(limit),
         Number(offset)
       );
-      return res.status(200).json({ artists });
+      return res.status(200).json({
+        limit: Number(limit),
+        offset: Number(offset),
+        total: artists.length,
+        artists,
+      });
     }
 
     if (ids) {
@@ -102,7 +108,7 @@ export const getArtistsAlbumsController = async (
   res: Response
 ) => {
   try {
-    const { artists_id } = req.params;
+    const { artist_id } = req.params;
     const { limit, offset } = req.query;
 
     if (!limit || !offset) {
@@ -114,8 +120,21 @@ export const getArtistsAlbumsController = async (
       });
     }
 
+    const artist = await getArtistsModel(artist_id);
+
+    if (!artist) {
+      const status = 404;
+      const message = `Artist not found`;
+      return res.status(status).json({
+        error: {
+          status,
+          message,
+        },
+      });
+    }
+
     const albums = await getArtistsAlbumsModel(
-      artists_id,
+      artist_id,
       Number(limit),
       Number(offset)
     );
@@ -201,7 +220,43 @@ export const createArtistsAlbumsController = async (
 
     const album = await createArtistsAlbumsModel(artist_id, albums);
     return res.status(201).json(album);
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    return res.status(500).json({
+      error: {
+        status: 500,
+        message: error.message,
+      },
+    });
+  }
+};
+
+export const removeArtistsAlbumsController = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { artist_id } = req.params;
+    const { albums, user } = req.body;
+
+    if (artist_id !== user.id) {
+      const status = 403;
+      const message = `You can't remove an album for another user`;
+      return res.status(status).json({
+        error: {
+          status,
+          message,
+        },
+      });
+    }
+
+    const deletedAlbum = await removeArtistsAlbumsModel(artist_id, albums);
+    return res.status(201).json(deletedAlbum);
+  } catch (error: any) {
+    return res.status(500).json({
+      error: {
+        status: 500,
+        message: error.message,
+      },
+    });
   }
 };

@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import fs from 'fs';
 
 import albums from './albums';
 import artists from './artists';
@@ -62,5 +63,16 @@ export default (): Router => {
       });
     }
   );
+  router.get('/media', (req, res) => {
+    const { path } = req.query;
+
+    if (!path) {
+      return res.status(400).json({ error: 'No media specified' });
+    }
+
+    const media = fs.readFileSync(`${path}`);
+
+    return res.status(200).send(media);
+  });
   return router;
 };

@@ -195,3 +195,37 @@ export const updateTrackDetailsModel = async (
       track_number,
     },
   });
+
+export const addTracksArtistsModel = async (
+  track_id: string,
+  artists: string[]
+) =>
+  await prisma.track.update({
+    where: {
+      id: track_id,
+    },
+    data: {
+      artists: {
+        connect: artists.map((artist) => ({
+          id: artist,
+        })),
+      },
+    },
+  });
+
+export const removeTracksArtistsModel = async (
+  track_id: string,
+  artists: string[]
+) =>
+  await prisma.track.update({
+    where: {
+      id: track_id,
+    },
+    data: {
+      artists: {
+        disconnect: artists.map((artist) => ({
+          id: artist,
+        })),
+      },
+    },
+  });

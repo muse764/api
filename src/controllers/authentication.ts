@@ -214,13 +214,11 @@ export const register = async (req: Request, res: Response) => {
     return res.status(201).json({
       new_user,
     });
-  } catch (error) {
-    const status = 500;
-    const message = `Internal server error`;
-    return res.status(status).json({
+  } catch (error: any) {
+    return res.status(500).json({
       error: {
-        status,
-        message,
+        status: 500,
+        message: error.message,
       },
     });
   }
@@ -296,13 +294,11 @@ export const login = async (req: Request, res: Response) => {
       accessToken,
       refreshToken,
     });
-  } catch (error) {
-    const status = 500;
-    const message = `Internal server error`;
-    return res.status(status).json({
+  } catch (error: any) {
+    return res.status(500).json({
       error: {
-        status,
-        message,
+        status: 500,
+        message: error.message,
       },
     });
   }
@@ -339,13 +335,11 @@ export const refresh = async (req: Request, res: Response) => {
     return res.status(200).json({
       accessToken,
     });
-  } catch (error) {
-    const status = 500;
-    const message = `Internal server error`;
-    return res.status(status).json({
+  } catch (error: any) {
+    return res.status(500).json({
       error: {
-        status,
-        message,
+        status: 500,
+        message: error.message,
       },
     });
   }

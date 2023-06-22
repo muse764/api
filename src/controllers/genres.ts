@@ -107,7 +107,12 @@ export const getSeveralGenresController = async (
 
     if (limit && offset) {
       const genres = await getSeveralGenresModel(Number(limit), Number(offset));
-      return res.status(200).json({ genres });
+      return res.status(200).json({
+        limit: Number(limit),
+        offset: Number(offset),
+        total: genres.length,
+        genres,
+      });
     }
 
     if (ids) {

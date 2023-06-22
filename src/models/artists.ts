@@ -225,3 +225,20 @@ export const createArtistsAlbumsModel = async (
       },
     },
   });
+
+export const removeArtistsAlbumsModel = async (
+  artist_id: string,
+  albums: string[]
+) =>
+  await prisma.user.update({
+    where: {
+      id: artist_id,
+    },
+    data: {
+      albums: {
+        delete: albums.map((album_id) => ({
+          id: album_id,
+        })),
+      },
+    },
+  });

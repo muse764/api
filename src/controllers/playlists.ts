@@ -13,7 +13,7 @@ import {
   uploadPlaylistsImagesModel,
 } from '../models';
 
-export const getPlaylistController = async (req: any, res: any) => {
+export const getPlaylistController = async (req: Request, res: Response) => {
   try {
     const { playlist_id } = req.params;
     const playlist = await getPlaylistModel(playlist_id);
@@ -40,7 +40,10 @@ export const getPlaylistController = async (req: any, res: any) => {
   }
 };
 
-export const getSeveralPlaylistsController = async (req: any, res: any) => {
+export const getSeveralPlaylistsController = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const { ids, limit, offset } = req.query;
 
@@ -80,7 +83,12 @@ export const getSeveralPlaylistsController = async (req: any, res: any) => {
         Number(limit),
         Number(offset)
       );
-      return res.status(200).json({ playlists });
+      return res.status(200).json({
+        limit: Number(limit),
+        offset: Number(offset),
+        total: playlists.length,
+        playlists,
+      });
     }
 
     if (ids) {
@@ -99,7 +107,10 @@ export const getSeveralPlaylistsController = async (req: any, res: any) => {
   }
 };
 
-export const getPlaylistsTracksController = async (req: any, res: any) => {
+export const getPlaylistsTracksController = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const { playlist_id } = req.params;
     const { limit, offset } = req.query;
@@ -135,14 +146,15 @@ export const getPlaylistsTracksController = async (req: any, res: any) => {
   }
 };
 
-export const updatePlaylistDetailsController = async (req: any, res: any) => {
+export const updatePlaylistDetailsController = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const { playlist_id } = req.params;
     const { name, description, user } = req.body;
 
     const playlist = await getPlaylistModel(playlist_id);
-
-    console.log(name);
 
     if (!playlist) {
       return res.status(404).json({
@@ -179,7 +191,10 @@ export const updatePlaylistDetailsController = async (req: any, res: any) => {
   }
 };
 
-export const uploadPlaylistsImagesController = async (req: any, res: any) => {
+export const uploadPlaylistsImagesController = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const { playlist_id } = req.params;
     const { images, user } = req.body;
@@ -346,7 +361,10 @@ export const removePlaylistsTracksController = async (
   }
 };
 
-export const removePlaylistsImagesController = async (req: any, res: any) => {
+export const removePlaylistsImagesController = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const { playlist_id } = req.params;
     const { images, user } = req.body;

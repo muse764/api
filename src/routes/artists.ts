@@ -5,6 +5,7 @@ import {
   getArtistsController,
   getArtistsTracksController,
   getSeveralArtistsController,
+  removeArtistsAlbumsController,
 } from '../controllers';
 import { authorize, isAuthenticated } from '../middlewares';
 
@@ -27,5 +28,13 @@ export default (router: Router) => {
     isAuthenticated,
     authorize('ARTIST'),
     createArtistsAlbumsController
+  );
+
+  // remove Albums
+  router.delete(
+    '/artists/:artist_id/albums',
+    isAuthenticated,
+    authorize('ARTIST'),
+    removeArtistsAlbumsController
   );
 };

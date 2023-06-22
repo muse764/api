@@ -195,6 +195,12 @@ export const getAlbumsTracksModel = async (
           id: true,
           name: true,
           file: true,
+          album: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
           artists: {
             select: {
               id: true,
@@ -234,6 +240,11 @@ export const createAlbumsTracksModel = async (
     albumId: string;
     file: string;
     track_number: number;
+    artists: {
+      connect: {
+        id: string;
+      };
+    };
   }[]
 ) =>
   await prisma.album.update({

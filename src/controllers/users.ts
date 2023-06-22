@@ -20,7 +20,14 @@ export const getUsersProfileController = async (
     const { user_id } = req.params;
     const user = await getUsersProfileModel(user_id);
     return res.status(200).json({ user });
-  } catch (error) {}
+  } catch (error: any) {
+    return res.status(500).json({
+      error: {
+        status: 500,
+        message: error.message,
+      },
+    });
+  }
 };
 
 export const getSeveralUsersController = async (
@@ -63,7 +70,12 @@ export const getSeveralUsersController = async (
 
     if (limit && offset) {
       const users = await getSeveralUsersModel(Number(limit), Number(offset));
-      return res.status(200).json({ users });
+      return res.status(200).json({
+        limit: Number(limit),
+        offset: Number(offset),
+        total: users.length,
+        users,
+      });
     }
 
     if (ids) {
@@ -72,7 +84,14 @@ export const getSeveralUsersController = async (
       const users = await getSeveralUsersModel(idsArray);
       return res.status(200).json({ users });
     }
-  } catch (error) {}
+  } catch (error: any) {
+    return res.status(500).json({
+      error: {
+        status: 500,
+        message: error.message,
+      },
+    });
+  }
 };
 
 export const getUsersPlaylistsController = async (
@@ -151,7 +170,14 @@ export const createUsersPlaylistController = async (
       user_id
     );
     return res.status(201).json(playlist);
-  } catch (error) {}
+  } catch (error: any) {
+    return res.status(500).json({
+      error: {
+        status: 500,
+        message: error.message,
+      },
+    });
+  }
 };
 
 export const uploadUsersImagesController = async (
@@ -220,8 +246,13 @@ export const uploadUsersImagesController = async (
 
     const image = await uploadUsersImagesModel(user.id, images);
     return res.status(201).json(image);
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    return res.status(500).json({
+      error: {
+        status: 500,
+        message: error.message,
+      },
+    });
   }
 };
 
@@ -252,7 +283,12 @@ export const updateUsersProfileController = async (
       password
     );
     return res.status(200).json(profile);
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    return res.status(500).json({
+      error: {
+        status: 500,
+        message: error.message,
+      },
+    });
   }
 };

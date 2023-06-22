@@ -113,7 +113,12 @@ export const getSeveralCategoriesController = async (
         Number(limit),
         Number(offset)
       );
-      return res.status(200).json({ categories });
+      return res.status(200).json({
+        limit: Number(limit),
+        offset: Number(offset),
+        total: categories.length,
+        categories,
+      });
     }
 
     if (ids) {

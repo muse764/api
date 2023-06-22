@@ -1,22 +1,22 @@
 import { type Router } from 'express';
 import {
+  addAlbumsArtistsController,
+  addAlbumsGenresController,
   createAlbumsTracksController,
   getAlbumsController,
   getAlbumsTracksController,
   getSeveralAlbumsController,
+  removeAlbumsArtistsController,
+  removeAlbumsGenresController,
   removeAlbumsImagesController,
   removeAlbumsTracksController,
   updateAlbumDetailsController,
   uploadAlbumsImagesController,
-  addAlbumsGenresController,
-  removeAlbumsGenresController,
-  addAlbumsArtistsController,
-  removeAlbumsArtistsController,
 } from '../controllers';
 import { authorize, isAuthenticated } from '../middlewares';
 
 export default (router: Router) => {
-  // Get an Album
+  // Create an Album
   router.get('/albums/:album_id', getAlbumsController);
 
   // Get Multiple Albums
@@ -29,6 +29,7 @@ export default (router: Router) => {
   router.put(
     '/albums/:album_id',
     isAuthenticated,
+    authorize('ARTIST', 'MODERATOR', 'ADMIN', 'SUPERADMIN'),
     updateAlbumDetailsController
   );
 

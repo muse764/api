@@ -18,6 +18,7 @@ import {
   getArtistsModel,
   getArtistsTracksModel,
   getSeveralArtistsModel,
+  removeArtistsAlbumsModel,
 } from './artists';
 import {
   createCategoriesModel,
@@ -55,6 +56,8 @@ import {
   getSeveralTracksModel,
   getTracksModel,
   updateTrackDetailsModel,
+  addTracksArtistsModel,
+  removeTracksArtistsModel,
 } from './tracks';
 import {
   createUserModel,
@@ -68,6 +71,9 @@ import {
 } from './users';
 
 export {
+  addTracksArtistsModel,
+  removeTracksArtistsModel,
+  removeArtistsAlbumsModel,
   addAlbumsArtistsModel,
   removeAlbumsArtistsModel,
   removeAlbumsGenresModel,

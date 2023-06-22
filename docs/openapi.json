@@ -1,0 +1,1991 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Muse API",
+    "description": "Muse Music Streaming Service API Documentation",
+    "contact": {
+      "email": "mubareksd@gmail.com"
+    },
+    "license": {
+      "name": "GPL 3.0",
+      "url": "https://www.gnu.org/licenses/gpl-3.0.html"
+    },
+    "version": "0.1.0"
+  },
+  "servers": [
+    {
+      "url": "http://api.muse.com/v1"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Authentication",
+      "description": "Authentication routes"
+    },
+    {
+      "name": "Albums",
+      "description": "Albums routes"
+    },
+    {
+      "name": "Artists",
+      "description": "Artists routes"
+    },
+    {
+      "name": "Categories",
+      "description": "Categories routes"
+    },
+    {
+      "name": "Genres",
+      "description": "Genres routes"
+    },
+    {
+      "name": "Me",
+      "description": "Me routes"
+    },
+    {
+      "name": "Playlists",
+      "description": "Playlists routes"
+    },
+    {
+      "name": "Tracks",
+      "description": "Tracks routes"
+    },
+    {
+      "name": "Users",
+      "description": "Users routes"
+    }
+  ],
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "tags": ["Authentication"],
+        "operationId": "login",
+        "summary": "Login",
+        "description": "Login to the application",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Login"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid credentials"
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": ["Authentication"],
+        "operationId": "register",
+        "summary": "Register",
+        "description": "Register to the application",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Register"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Registration successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid credentials"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": ["Authentication"],
+        "operationId": "logout",
+        "summary": "Logout",
+        "description": "Logout of the application",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logged out Successfully"
+          }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "tags": ["Authentication"],
+        "operationId": "refresh",
+        "summary": "Refresh",
+        "description": "Refresh access token",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Refresh"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Refreshed Successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefreshResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/albums": {
+      "get": {
+        "tags": ["Albums"],
+        "operationId": "getseveralalbums",
+        "summary": "Albums",
+        "description": "Get Several Albums",
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "description": "ids",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limit",
+            "example": 10,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset",
+            "example": 0,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetched Successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SeveralAlbumsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/albums/{id}": {
+      "get": {
+        "tags": ["Albums"],
+        "operationId": "getalbumbyid",
+        "summary": "Albums",
+        "description": "Get Album with id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "8fa3f58b-6e88-4d7c-9b7e-aacbdd9a77fe",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetched Successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Album"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Albums"],
+        "operationId": "updatealbum",
+        "summary": "Albums",
+        "description": "Update Album",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "8fa3f58b-6e88-4d7c-9b7e-aacbdd9a77fe",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAlbum"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated Successfully"
+          }
+        }
+      }
+    },
+    "/albums/{id}/tracks": {
+      "get": {
+        "tags": ["Albums"],
+        "operationId": "getalbumstracks",
+        "summary": "Albums",
+        "description": "Get Albums Tracks",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "8fa3f58b-6e88-4d7c-9b7e-aacbdd9a77fe",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limit",
+            "example": 10,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset",
+            "example": 0,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetched Successfully"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Albums"],
+        "operationId": "addalbumtracks",
+        "summary": "Albums",
+        "description": "Add Album Tracks",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "8fa3f58b-6e88-4d7c-9b7e-aacbdd9a77fe",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AlbumTracks"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Added Successfully"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Albums"],
+        "operationId": "deletealbumtracks",
+        "summary": "Albums",
+        "description": "Delete Album Tracks",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "8fa3f58b-6e88-4d7c-9b7e-aacbdd9a77fe",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AlbumTracks"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Deleted Successfully"
+          }
+        }
+      }
+    },
+    "/albums/{id}/genres": {
+      "post": {
+        "tags": ["Albums"],
+        "operationId": "addalbumgenres",
+        "summary": "Albums",
+        "description": "Add Album Genres",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "8fa3f58b-6e88-4d7c-9b7e-aacbdd9a77fe",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AlbumGenres"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Added Successfully"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Albums"],
+        "operationId": "deletealbumgenres",
+        "summary": "Albums",
+        "description": "Delete Album Genres",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "8fa3f58b-6e88-4d7c-9b7e-aacbdd9a77fe",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AlbumGenres"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Deleted Successfully"
+          }
+        }
+      }
+    },
+    "/albums/{id}/artists": {
+      "post": {
+        "tags": ["Albums"],
+        "operationId": "addalbumartists",
+        "summary": "Albums",
+        "description": "Add Album Artists",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "8fa3f58b-6e88-4d7c-9b7e-aacbdd9a77fe",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AlbumArtists"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Added Successfully"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Albums"],
+        "operationId": "deletealbumartists",
+        "summary": "Albums",
+        "description": "Delete Album Artists",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "8fa3f58b-6e88-4d7c-9b7e-aacbdd9a77fe",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AlbumArtists"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Deleted Successfully"
+          }
+        }
+      }
+    },
+    "/albums/{id}/images": {
+      "put": {
+        "tags": ["Albums"],
+        "operationId": "updatealbumimages",
+        "summary": "Albums",
+        "description": "Update Album Images",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "8fa3f58b-6e88-4d7c-9b7e-aacbdd9a77fe",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAlbumImages"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated Successfully"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Albums"],
+        "operationId": "deletealbumimages",
+        "summary": "Albums",
+        "description": "Delete Album Images",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "8fa3f58b-6e88-4d7c-9b7e-aacbdd9a77fe",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted Successfully"
+          }
+        }
+      }
+    },
+    "/artists": {
+      "get": {
+        "tags": ["Artists"],
+        "summary": "Artists",
+        "description": "Get Several Artists",
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "description": "ids",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limit",
+            "example": 10,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset",
+            "example": 0,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetched Successfully"
+          }
+        }
+      }
+    },
+    "/artists/{id}": {
+      "get": {
+        "tags": ["Artists"],
+        "summary": "Artists",
+        "description": "Get Artist with id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "e242bc9a0ceea852400d3f927f07557e4a36b9f34e7f",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetched Successfully"
+          }
+        }
+      }
+    },
+    "/artists/{id}/albums": {
+      "get": {
+        "tags": ["Artists"],
+        "summary": "Artists",
+        "description": "Get Artists Albums",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "e242bc9a0ceea852400d3f927f07557e4a36b9f34e7f",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limit",
+            "example": 10,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset",
+            "example": 0,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetched Successfully"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Artists"],
+        "summary": "Artists",
+        "description": "Create Artist Album",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "e242bc9a0ceea852400d3f927f07557e4a36b9f34e7f",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArtistAlbums"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Created Successfully"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Artists"],
+        "summary": "Artists",
+        "description": "Delete Artist Album",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "e242bc9a0ceea852400d3f927f07557e4a36b9f34e7f",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArtistAlbums"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Deleted Successfully"
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "tags": ["Categories"],
+        "summary": "Categories",
+        "description": "Get Several Categories",
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "description": "ids",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limit",
+            "example": 10,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset",
+            "example": 0,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetched Successfully"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Categories"],
+        "summary": "Categories",
+        "description": "Create Category",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Categories"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Created Successfully"
+          }
+        }
+      }
+    },
+    "/categories/{id}": {
+      "get": {
+        "tags": ["Categories"],
+        "summary": "Categories",
+        "description": "Get Category with id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "5272457a980bab8465e22ca2aef2ef482a199a237923",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetched Successfully"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Categories"],
+        "summary": "Categories",
+        "description": "Update Category with id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "5272457a980bab8465e22ca2aef2ef482a199a237923",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Categories"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated Successfully"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Categories"],
+        "summary": "Categories",
+        "description": "Delete Category with id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "5272457a980bab8465e22ca2aef2ef482a199a237923",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted Successfully"
+          }
+        }
+      }
+    },
+    "/genres": {
+      "get": {
+        "tags": ["Genres"],
+        "summary": "Genres",
+        "description": "Get Several Genres",
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "description": "ids",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limit",
+            "example": 10,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset",
+            "example": 0,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetched Successfully"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Genres"],
+        "summary": "Genres",
+        "description": "Create Genre",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Genres"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Created Successfully"
+          }
+        }
+      }
+    },
+    "/genres/{id}": {
+      "get": {
+        "tags": ["Genres"],
+        "summary": "Genres",
+        "description": "Get genre with id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "5272457a980bab8465e22ca2aef2ef482a199a237923",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetched Successfully"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Genres"],
+        "summary": "Genres",
+        "description": "Update genre with id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "5272457a980bab8465e22ca2aef2ef482a199a237923",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Genres"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated Successfully"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Genres"],
+        "summary": "Genres",
+        "description": "Delete genre with id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "5272457a980bab8465e22ca2aef2ef482a199a237923",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted Successfully"
+          }
+        }
+      }
+    },
+    "/me": {
+      "get": {
+        "tags": ["Me"],
+        "summary": "Me",
+        "description": "Get Current user",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetched Successfully"
+          }
+        }
+      }
+    },
+    "/me/playlists": {
+      "get": {
+        "tags": ["Me"],
+        "summary": "Me",
+        "description": "Get Current users Playlists",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetched Successfully"
+          }
+        }
+      }
+    },
+    "/me/albums": {
+      "get": {
+        "tags": ["Me"],
+        "summary": "Me",
+        "description": "Get Current users Albums",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetched Successfully"
+          }
+        }
+      }
+    },
+    "/playlists": {
+      "get": {
+        "tags": ["Playlists"],
+        "summary": "Playlists",
+        "description": "Get Several Playlists",
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "description": "ids",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limit",
+            "example": 10,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset",
+            "example": 0,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetched Successfully"
+          }
+        }
+      }
+    },
+    "/Playlists/{id}": {
+      "get": {
+        "tags": ["Playlists"],
+        "summary": "Playlists",
+        "description": "Get Playlist with id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "5272457a980bab8465e22ca2aef2ef482a199a237923",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetched Successfully"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Playlists"],
+        "summary": "Playlists",
+        "description": "Update Playlist with id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "5272457a980bab8465e22ca2aef2ef482a199a237923",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Playlists"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated Successfully"
+          }
+        }
+      }
+    },
+    "/playlists/{id}/tracks": {
+      "get": {
+        "tags": ["Playlists"],
+        "summary": "Playlists",
+        "description": "Get Playlist Tracks with id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "5272457a980bab8465e22ca2aef2ef482a199a237923",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetched Successfully"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Playlists"],
+        "summary": "Playlists",
+        "description": "Add Tracks to Playlist with id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "5272457a980bab8465e22ca2aef2ef482a199a237923",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Playlists"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Added Successfully"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Playlists"],
+        "summary": "Playlists",
+        "description": "Remove Tracks from Playlist with id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "5272457a980bab8465e22ca2aef2ef482a199a237923",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Playlists"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Removed Successfully"
+          }
+        }
+      }
+    },
+    "/playlists/{id}/images": {
+      "put": {
+        "tags": ["Playlists"],
+        "summary": "Playlists",
+        "description": "Update Playlist Image with id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "5272457a980bab8465e22ca2aef2ef482a199a237923",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Playlists"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated Successfully"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Playlists"],
+        "summary": "Playlists",
+        "description": "Remove Playlist Image with id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "5272457a980bab8465e22ca2aef2ef482a199a237923",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Removed Successfully"
+          }
+        }
+      }
+    },
+    "/tracks": {
+      "get": {
+        "tags": ["Tracks"],
+        "summary": "Tracks",
+        "description": "Get Several Tracks",
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "description": "ids",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limit",
+            "example": 10,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset",
+            "example": 0,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetched Successfully"
+          }
+        }
+      }
+    },
+    "/tracks/{id}": {
+      "get": {
+        "tags": ["Tracks"],
+        "summary": "Tracks",
+        "description": "Get Track with id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "5272457a980bab8465e22ca2aef2ef482a199a237923",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetched Successfully"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Tracks"],
+        "summary": "Tracks",
+        "description": "Update Track with id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "5272457a980bab8465e22ca2aef2ef482a199a237923",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tracks"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated Successfully"
+          }
+        }
+      }
+    },
+    "/tracks/{id}/artists": {
+      "post": {
+        "tags": ["Tracks"],
+        "summary": "Tracks",
+        "description": "Add Artist to Track with id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "5272457a980bab8465e22ca2aef2ef482a199a237923",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tracks"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Added Successfully"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Tracks"],
+        "summary": "Tracks",
+        "description": "Remove Artist from Track with id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "5272457a980bab8465e22ca2aef2ef482a199a237923",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tracks"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Removed Successfully"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Users",
+        "description": "Get Several Users",
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "description": "ids",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limit",
+            "example": 10,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset",
+            "example": 0,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetched Successfully"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Users",
+        "description": "Get User with id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "5272457a980bab8465e22ca2aef2ef482a199a237923",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetched Successfully"
+          }
+        }
+      }
+    },
+    "/users/{id}/playlists": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Users",
+        "description": "Get User's Playlists with id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "5272457a980bab8465e22ca2aef2ef482a199a237923",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetched Successfully"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Users"],
+        "summary": "Users",
+        "description": "Create User's Playlist with id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "5272457a980bab8465e22ca2aef2ef482a199a237923",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Playlists"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Created Successfully"
+          }
+        }
+      }
+    },
+    "/users/{id}/image": {
+      "put": {
+        "tags": ["Users"],
+        "summary": "Users",
+        "description": "Update User's Image with id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "5272457a980bab8465e22ca2aef2ef482a199a237923",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Users"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated Successfully"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Login": {
+        "required": ["email", "password"],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "user1.artist@muse.com",
+            "description": "User email"
+          },
+          "password": {
+            "type": "string",
+            "example": "?b8zUI.aw}v@?Kja&f[V[>!Bwars*_d",
+            "description": "User password"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlMjQyYmM5YTBjZWVhODUyNDAwZDNmOTI3ZjA3NTU3ZTRhMzZiOWYzNGU3ZiIsInJvbGUiOiJBUlRJU1QiLCJpYXQiOjE2ODcxNTMxMTAsImV4cCI6MTY4NzE1NjcxMH0.8RnciaKJQI8CZcYYe2wJoaK9NJPHNnB--QdTgFlp85A",
+            "description": "User Access Token"
+          },
+          "refreshToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlMjQyYmM5YTBjZWVhODUyNDAwZDNmOTI3ZjA3NTU3ZTRhMzZiOWYzNGU3ZiIsInJvbGUiOiJBUlRJU1QiLCJpYXQiOjE2ODcxNTMxMTAsImV4cCI6MTY4OTc0NTExMH0.SgNOHhdb7ooVkgWlKMEX_IwfetR2vIK4aiDU7EsTXlU",
+            "description": "User Refresh Token"
+          }
+        }
+      },
+      "Register": {
+        "required": ["full_name", "username", "email", "password"],
+        "type": "object",
+        "properties": {
+          "full_name": {
+            "type": "string",
+            "example": "user1 artist",
+            "description": "User Full Name"
+          },
+          "username": {
+            "type": "string",
+            "example": "user1artist",
+            "description": "User Display Name"
+          },
+          "email": {
+            "type": "string",
+            "example": "user1.artist@muse.com",
+            "description": "User Email"
+          },
+          "password": {
+            "type": "string",
+            "example": "",
+            "description": "User Password"
+          }
+        }
+      },
+      "RegisterResponse": {
+        "type": "object",
+        "properties": {
+          "new_user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "41d0407b-c0cb-483e-a047-b6a6f4cb1620",
+                "description": "User email"
+              },
+              "full_name": {
+                "type": "string",
+                "example": "user3 artist",
+                "description": "User password"
+              },
+              "usename": {
+                "type": "string",
+                "example": "user13artist",
+                "description": "User password"
+              },
+              "email": {
+                "type": "string",
+                "example": "user3.artist@muse.com",
+                "description": "User password"
+              },
+              "password": {
+                "type": "string",
+                "example": "$2b$10$7Pvlz5TJ2Y15Kw2QkjwOdOljcbY8KoUH94/GjgV1Iw7BNH3Vm2id6",
+                "description": "User password"
+              },
+              "role": {
+                "type": "string",
+                "example": "USER",
+                "description": "User role"
+              },
+              "active": {
+                "type": "string",
+                "example": "true",
+                "description": "user status"
+              },
+              "createdAt": {
+                "type": "string",
+                "example": "2023-06-20T07:00:08.287Z",
+                "description": "data created time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "example": "2023-06-20T07:00:08.287Z",
+                "description": "data update time"
+              }
+            }
+          }
+        }
+      },
+      "Refresh": {
+        "required": ["refreshToken"],
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlMjQyYmM5YTBjZWVhODUyNDAwZDNmOTI3ZjA3NTU3ZTRhMzZiOWYzNGU3ZiIsInJvbGUiOiJBUlRJU1QiLCJpYXQiOjE2ODcxNTMxMTAsImV4cCI6MTY4OTc0NTExMH0.SgNOHhdb7ooVkgWlKMEX_IwfetR2vIK4aiDU7EsTXlU",
+            "description": "User Refresh Token"
+          }
+        }
+      },
+      "RefreshResponse": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlMjQyYmM5YTBjZWVhODUyNDAwZDNmOTI3ZjA3NTU3ZTRhMzZiOWYzNGU3ZiIsInJvbGUiOiJBUlRJU1QiLCJpYXQiOjE2ODcxNTMxMTAsImV4cCI6MTY4NzE1NjcxMH0.8RnciaKJQI8CZcYYe2wJoaK9NJPHNnB--QdTgFlp85A",
+            "description": "User Access Token"
+          }
+        }
+      },
+      "AlbumGenres": {
+        "type": "object",
+        "properties": {
+          "genres": {
+            "type": "object",
+            "example": ["dsfdsf", "dsfdsfs"],
+            "description": "Array of Album Genres"
+          }
+        }
+      },
+      "SeveralAlbumsResponse": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "number",
+            "example": 10,
+            "description": "Number of Albums"
+          },
+          "offset": {
+            "type": "number",
+            "example": 0,
+            "description": "Number of Albums"
+          },
+          "total": {
+            "type": "number",
+            "example": 1,
+            "description": "Number of Albums"
+          },
+          "albums": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Album"
+            }
+          }
+        }
+      },
+      "Album": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "41d0407b-c0cb-483e-a047-b6a6f4cb1620",
+            "description": "Album ID"
+          },
+          "name": {
+            "type": "string",
+            "example": "The Dark Side of the Moon",
+            "description": "Album name"
+          },
+          "type": {
+            "type": "string",
+            "example": "ALBUM",
+            "description": "Album type"
+          },
+          "release_date": {
+            "type": "string",
+            "example": "1973-03-01",
+            "description": "Album release date"
+          }
+        }
+      },
+      "UpdateAlbum": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "The Dark Side of the Moon",
+            "description": "Album name"
+          },
+          "type": {
+            "type": "string",
+            "example": "ALBUM",
+            "description": "Album type"
+          },
+          "release_date": {
+            "type": "string",
+            "example": "1973-03-01",
+            "description": "Album release date"
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "Login": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Login"
+            }
+          }
+        }
+      },
+      "Register": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Register"
+            }
+          }
+        }
+      },
+      "Refresh": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Refresh"
+            }
+          }
+        }
+      },
+      "UpdateAlbum": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UpdateAlbum"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

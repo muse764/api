@@ -18,6 +18,7 @@ import {
   getArtistsController,
   getArtistsTracksController,
   getSeveralArtistsController,
+  removeArtistsAlbumsController,
 } from './artists';
 import { login, refresh, register } from './authentication';
 import {
@@ -56,6 +57,8 @@ import {
   getSeveralTracksController,
   getTracksController,
   updateTrackController,
+  addTracksArtistsController,
+  removeTracksArtistsController,
 } from './tracks';
 import {
   createUsersPlaylistController,
@@ -66,6 +69,9 @@ import {
   uploadUsersImagesController,
 } from './users';
 export {
+  addTracksArtistsController,
+  removeTracksArtistsController,
+  removeArtistsAlbumsController,
   addAlbumsArtistsController,
   removeAlbumsArtistsController,
   removeAlbumsGenresController,

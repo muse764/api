@@ -43,6 +43,12 @@ export async function getSeveralPlaylistsModel(
         id: true,
         name: true,
         description: true,
+        owner: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
         images: true,
         tracks: true,
       },
@@ -55,6 +61,12 @@ export async function getSeveralPlaylistsModel(
         id: true,
         name: true,
         description: true,
+        owner: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
         images: true,
         tracks: true,
       },

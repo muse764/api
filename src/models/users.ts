@@ -40,7 +40,14 @@ export const getUsersProfileModel = async (id: string) =>
     select: {
       id: true,
       username: true,
-      images: true,
+      images: {
+        select: {
+          id: true,
+          file: true,
+          width: true,
+          height: true,
+        },
+      },
     },
   });
 
@@ -63,7 +70,14 @@ export async function getSeveralUsersModel(
       select: {
         id: true,
         username: true,
-        images: true,
+        images: {
+          select: {
+            id: true,
+            file: true,
+            width: true,
+            height: true,
+          },
+        },
       },
     });
   } else {
@@ -73,7 +87,14 @@ export async function getSeveralUsersModel(
       select: {
         id: true,
         username: true,
-        images: true,
+        images: {
+          select: {
+            id: true,
+            file: true,
+            width: true,
+            height: true,
+          },
+        },
       },
     });
   }
