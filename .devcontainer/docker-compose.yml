@@ -19,6 +19,15 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
       POSTGRES_DB: muse
+    networks:
+      apinetwork:
+        ipv4_address: 172.50.0.10
 
 volumes:
   postgres-data:
+
+networks:
+  apinetwork:
+    ipam:
+      config:
+        - subnet: 172.50.0.0/16

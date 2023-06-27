@@ -62,6 +62,7 @@
         "operationId": "login",
         "summary": "Login",
         "description": "Login to the application",
+        "security": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -94,6 +95,7 @@
         "operationId": "register",
         "summary": "Register",
         "description": "Register to the application",
+        "security": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -128,12 +130,15 @@
         "description": "Logout of the application",
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
         ],
         "responses": {
           "200": {
             "description": "Logged out Successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       }
@@ -144,6 +149,7 @@
         "operationId": "refresh",
         "summary": "Refresh",
         "description": "Refresh access token",
+        "security": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -163,6 +169,9 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       }
@@ -173,6 +182,7 @@
         "operationId": "getseveralalbums",
         "summary": "Albums",
         "description": "Get Several Albums",
+        "security": [],
         "parameters": [
           {
             "name": "ids",
@@ -213,6 +223,9 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Invalid ids"
           }
         }
       }
@@ -223,6 +236,7 @@
         "operationId": "getalbumbyid",
         "summary": "Albums",
         "description": "Get Album with id",
+        "security": [],
         "parameters": [
           {
             "name": "id",
@@ -244,6 +258,9 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Invalid id"
           }
         }
       },
@@ -252,6 +269,7 @@
         "operationId": "updatealbum",
         "summary": "Albums",
         "description": "Update Album",
+        "security": [],
         "parameters": [
           {
             "name": "id",
@@ -275,6 +293,9 @@
         "responses": {
           "200": {
             "description": "Updated Successfully"
+          },
+          "400": {
+            "description": "Invalid id"
           }
         }
       }
@@ -285,6 +306,7 @@
         "operationId": "getalbumstracks",
         "summary": "Albums",
         "description": "Get Albums Tracks",
+        "security": [],
         "parameters": [
           {
             "name": "id",
@@ -319,6 +341,9 @@
         "responses": {
           "200": {
             "description": "Fetched Successfully"
+          },
+          "400": {
+            "description": "Invalid"
           }
         }
       },
@@ -329,7 +354,7 @@
         "description": "Add Album Tracks",
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
         ],
         "parameters": [
@@ -343,18 +368,12 @@
             }
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AlbumTracks"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Added Successfully"
+          },
+          "400": {
+            "description": "Invalid"
           }
         }
       },
@@ -365,7 +384,7 @@
         "description": "Delete Album Tracks",
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
         ],
         "parameters": [
@@ -379,18 +398,12 @@
             }
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AlbumTracks"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Deleted Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -403,7 +416,7 @@
         "description": "Add Album Genres",
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
         ],
         "parameters": [
@@ -429,6 +442,9 @@
         "responses": {
           "200": {
             "description": "Added Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       },
@@ -439,7 +455,7 @@
         "description": "Delete Album Genres",
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
         ],
         "parameters": [
@@ -465,6 +481,9 @@
         "responses": {
           "200": {
             "description": "Deleted Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -477,7 +496,7 @@
         "description": "Add Album Artists",
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
         ],
         "parameters": [
@@ -491,18 +510,12 @@
             }
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AlbumArtists"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Added Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       },
@@ -513,7 +526,7 @@
         "description": "Delete Album Artists",
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
         ],
         "parameters": [
@@ -527,18 +540,12 @@
             }
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AlbumArtists"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Deleted Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -551,7 +558,7 @@
         "description": "Update Album Images",
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
         ],
         "parameters": [
@@ -565,18 +572,12 @@
             }
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateAlbumImages"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Updated Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       },
@@ -587,7 +588,7 @@
         "description": "Delete Album Images",
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
         ],
         "parameters": [
@@ -604,6 +605,9 @@
         "responses": {
           "200": {
             "description": "Deleted Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -611,8 +615,10 @@
     "/artists": {
       "get": {
         "tags": ["Artists"],
+        "operationId": "getseveralArtists",
         "summary": "Artists",
         "description": "Get Several Artists",
+        "security": [],
         "parameters": [
           {
             "name": "ids",
@@ -646,6 +652,9 @@
         "responses": {
           "200": {
             "description": "Fetched Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -653,8 +662,10 @@
     "/artists/{id}": {
       "get": {
         "tags": ["Artists"],
+        "operationId": "getartistbyid",
         "summary": "Artists",
         "description": "Get Artist with id",
+        "security": [],
         "parameters": [
           {
             "name": "id",
@@ -669,6 +680,9 @@
         "responses": {
           "200": {
             "description": "Fetched Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -676,8 +690,10 @@
     "/artists/{id}/albums": {
       "get": {
         "tags": ["Artists"],
+        "operationId": "getartistsalbums",
         "summary": "Artists",
         "description": "Get Artists Albums",
+        "security": [],
         "parameters": [
           {
             "name": "id",
@@ -712,16 +728,20 @@
         "responses": {
           "200": {
             "description": "Fetched Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       },
       "post": {
         "tags": ["Artists"],
+        "operationId": "createartistalbum",
         "summary": "Artists",
         "description": "Create Artist Album",
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
         ],
         "parameters": [
@@ -735,28 +755,23 @@
             }
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ArtistAlbums"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Created Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       },
       "delete": {
         "tags": ["Artists"],
+        "operationId": "deleteartistalbum",
         "summary": "Artists",
         "description": "Delete Artist Album",
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
         ],
         "parameters": [
@@ -770,18 +785,12 @@
             }
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ArtistAlbums"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Deleted Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -789,8 +798,10 @@
     "/categories": {
       "get": {
         "tags": ["Categories"],
+        "operationId": "getseveralcategories",
         "summary": "Categories",
         "description": "Get Several Categories",
+        "security": [],
         "parameters": [
           {
             "name": "ids",
@@ -824,30 +835,28 @@
         "responses": {
           "200": {
             "description": "Fetched Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       },
       "post": {
         "tags": ["Categories"],
+        "operationId": "createcategory",
         "summary": "Categories",
         "description": "Create Category",
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Categories"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Created Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -855,8 +864,10 @@
     "/categories/{id}": {
       "get": {
         "tags": ["Categories"],
+        "operationId": "getcategorybyid",
         "summary": "Categories",
         "description": "Get Category with id",
+        "security": [],
         "parameters": [
           {
             "name": "id",
@@ -871,16 +882,20 @@
         "responses": {
           "200": {
             "description": "Fetched Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       },
       "put": {
         "tags": ["Categories"],
+        "operationId": "updatecategorybyid",
         "summary": "Categories",
         "description": "Update Category with id",
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
         ],
         "parameters": [
@@ -894,28 +909,23 @@
             }
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Categories"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Updated Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       },
       "delete": {
         "tags": ["Categories"],
+        "operationId": "deletecategorybyid",
         "summary": "Categories",
         "description": "Delete Category with id",
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
         ],
         "parameters": [
@@ -932,6 +942,9 @@
         "responses": {
           "200": {
             "description": "Deleted Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -939,8 +952,10 @@
     "/genres": {
       "get": {
         "tags": ["Genres"],
+        "operationId": "getseveralgenres",
         "summary": "Genres",
         "description": "Get Several Genres",
+        "security": [],
         "parameters": [
           {
             "name": "ids",
@@ -974,30 +989,28 @@
         "responses": {
           "200": {
             "description": "Fetched Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       },
       "post": {
         "tags": ["Genres"],
+        "operationId": "creategenre",
         "summary": "Genres",
         "description": "Create Genre",
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Genres"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Created Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -1005,8 +1018,10 @@
     "/genres/{id}": {
       "get": {
         "tags": ["Genres"],
+        "operationId": "getgenrebyid",
         "summary": "Genres",
         "description": "Get genre with id",
+        "security": [],
         "parameters": [
           {
             "name": "id",
@@ -1021,16 +1036,20 @@
         "responses": {
           "200": {
             "description": "Fetched Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       },
       "put": {
         "tags": ["Genres"],
+        "operationId": "updategenrebyid",
         "summary": "Genres",
         "description": "Update genre with id",
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
         ],
         "parameters": [
@@ -1044,28 +1063,23 @@
             }
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Genres"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Updated Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       },
       "delete": {
         "tags": ["Genres"],
+        "operationId": "deletegenrebyid",
         "summary": "Genres",
         "description": "Delete genre with id",
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
         ],
         "parameters": [
@@ -1082,6 +1096,9 @@
         "responses": {
           "200": {
             "description": "Deleted Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -1089,6 +1106,7 @@
     "/me": {
       "get": {
         "tags": ["Me"],
+        "operationId": "getmyprofile",
         "summary": "Me",
         "description": "Get Current user",
         "security": [
@@ -1099,6 +1117,9 @@
         "responses": {
           "200": {
             "description": "Fetched Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -1106,6 +1127,7 @@
     "/me/playlists": {
       "get": {
         "tags": ["Me"],
+        "operationId": "getmyplaylists",
         "summary": "Me",
         "description": "Get Current users Playlists",
         "security": [
@@ -1116,6 +1138,9 @@
         "responses": {
           "200": {
             "description": "Fetched Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -1123,6 +1148,7 @@
     "/me/albums": {
       "get": {
         "tags": ["Me"],
+        "operationId": "getmyalbums",
         "summary": "Me",
         "description": "Get Current users Albums",
         "security": [
@@ -1133,6 +1159,9 @@
         "responses": {
           "200": {
             "description": "Fetched Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -1140,8 +1169,10 @@
     "/playlists": {
       "get": {
         "tags": ["Playlists"],
+        "operationId": "getseveralplaylists",
         "summary": "Playlists",
         "description": "Get Several Playlists",
+        "security": [],
         "parameters": [
           {
             "name": "ids",
@@ -1175,6 +1206,9 @@
         "responses": {
           "200": {
             "description": "Fetched Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -1182,8 +1216,10 @@
     "/Playlists/{id}": {
       "get": {
         "tags": ["Playlists"],
+        "operationId": "getplaylistbyid",
         "summary": "Playlists",
         "description": "Get Playlist with id",
+        "security": [],
         "parameters": [
           {
             "name": "id",
@@ -1198,16 +1234,20 @@
         "responses": {
           "200": {
             "description": "Fetched Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       },
       "put": {
         "tags": ["Playlists"],
+        "operationId": "updateplaylistbyid",
         "summary": "Playlists",
         "description": "Update Playlist with id",
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
         ],
         "parameters": [
@@ -1221,18 +1261,12 @@
             }
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Playlists"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Updated Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -1240,8 +1274,10 @@
     "/playlists/{id}/tracks": {
       "get": {
         "tags": ["Playlists"],
+        "operationId": "getplayliststracks",
         "summary": "Playlists",
         "description": "Get Playlist Tracks with id",
+        "security": [],
         "parameters": [
           {
             "name": "id",
@@ -1256,16 +1292,20 @@
         "responses": {
           "200": {
             "description": "Fetched Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       },
       "post": {
         "tags": ["Playlists"],
+        "operationId": "createplaylisttracks",
         "summary": "Playlists",
         "description": "Add Tracks to Playlist with id",
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
         ],
         "parameters": [
@@ -1279,28 +1319,23 @@
             }
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Playlists"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Added Successfully"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       },
       "delete": {
         "tags": ["Playlists"],
+        "operationId": "deleteplaylisttracks",
         "summary": "Playlists",
         "description": "Remove Tracks from Playlist with id",
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
         ],
         "parameters": [
@@ -1314,18 +1349,12 @@
             }
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Playlists"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Removed Successfully"
+          },
+          "400": {
+            "description": "Invalid"
           }
         }
       }
@@ -1333,11 +1362,12 @@
     "/playlists/{id}/images": {
       "put": {
         "tags": ["Playlists"],
+        "operationId": "updateplaylistsimages",
         "summary": "Playlists",
         "description": "Update Playlist Image with id",
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
         ],
         "parameters": [
@@ -1351,28 +1381,23 @@
             }
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Playlists"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Updated Successfully"
+          },
+          "400": {
+            "description": "Invalid"
           }
         }
       },
       "delete": {
         "tags": ["Playlists"],
+        "operationId": "deleteplaylistimages",
         "summary": "Playlists",
         "description": "Remove Playlist Image with id",
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
         ],
         "parameters": [
@@ -1389,6 +1414,9 @@
         "responses": {
           "200": {
             "description": "Removed Successfully"
+          },
+          "400": {
+            "description": "Invalid"
           }
         }
       }
@@ -1396,8 +1424,10 @@
     "/tracks": {
       "get": {
         "tags": ["Tracks"],
+        "operationId": "getseveraltracks",
         "summary": "Tracks",
         "description": "Get Several Tracks",
+        "security": [],
         "parameters": [
           {
             "name": "ids",
@@ -1431,6 +1461,9 @@
         "responses": {
           "200": {
             "description": "Fetched Successfully"
+          },
+          "400": {
+            "description": "Invalid"
           }
         }
       }
@@ -1438,8 +1471,10 @@
     "/tracks/{id}": {
       "get": {
         "tags": ["Tracks"],
+        "operationId": "gettrackbyid",
         "summary": "Tracks",
         "description": "Get Track with id",
+        "security": [],
         "parameters": [
           {
             "name": "id",
@@ -1454,16 +1489,20 @@
         "responses": {
           "200": {
             "description": "Fetched Successfully"
+          },
+          "400": {
+            "description": "Invalid"
           }
         }
       },
       "put": {
         "tags": ["Tracks"],
+        "operationId": "updatetrackbyid",
         "summary": "Tracks",
         "description": "Update Track with id",
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
         ],
         "parameters": [
@@ -1477,18 +1516,12 @@
             }
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Tracks"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Updated Successfully"
+          },
+          "400": {
+            "description": "Invalid"
           }
         }
       }
@@ -1496,11 +1529,12 @@
     "/tracks/{id}/artists": {
       "post": {
         "tags": ["Tracks"],
+        "operationId": "gettracksartists",
         "summary": "Tracks",
         "description": "Add Artist to Track with id",
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
         ],
         "parameters": [
@@ -1514,28 +1548,23 @@
             }
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Tracks"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Added Successfully"
+          },
+          "400": {
+            "description": "Invalid"
           }
         }
       },
       "delete": {
         "tags": ["Tracks"],
+        "operationId": "deletetrackartist",
         "summary": "Tracks",
         "description": "Remove Artist from Track with id",
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
         ],
         "parameters": [
@@ -1549,18 +1578,12 @@
             }
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Tracks"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Removed Successfully"
+          },
+          "400": {
+            "description": "Invalid"
           }
         }
       }
@@ -1568,8 +1591,10 @@
     "/users": {
       "get": {
         "tags": ["Users"],
+        "operationId": "getseveralusers",
         "summary": "Users",
         "description": "Get Several Users",
+        "security": [],
         "parameters": [
           {
             "name": "ids",
@@ -1603,6 +1628,9 @@
         "responses": {
           "200": {
             "description": "Fetched Successfully"
+          },
+          "400": {
+            "description": "Invalid"
           }
         }
       }
@@ -1610,8 +1638,10 @@
     "/users/{id}": {
       "get": {
         "tags": ["Users"],
+        "operationId": "getuserbyid",
         "summary": "Users",
         "description": "Get User with id",
+        "security": [],
         "parameters": [
           {
             "name": "id",
@@ -1626,6 +1656,9 @@
         "responses": {
           "200": {
             "description": "Fetched Successfully"
+          },
+          "400": {
+            "description": "Invalid"
           }
         }
       }
@@ -1633,8 +1666,10 @@
     "/users/{id}/playlists": {
       "get": {
         "tags": ["Users"],
+        "operationId": "getusersplaylists",
         "summary": "Users",
         "description": "Get User's Playlists with id",
+        "security": [],
         "parameters": [
           {
             "name": "id",
@@ -1649,16 +1684,20 @@
         "responses": {
           "200": {
             "description": "Fetched Successfully"
+          },
+          "400": {
+            "description": "Invalid"
           }
         }
       },
       "post": {
         "tags": ["Users"],
+        "operationId": "createuserplaylist",
         "summary": "Users",
         "description": "Create User's Playlist with id",
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
         ],
         "parameters": [
@@ -1672,40 +1711,55 @@
             }
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Playlists"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Created Successfully"
+          },
+          "400": {
+            "description": "Invalid"
           }
         }
       },
       "delete": {
         "tags": ["Users"],
+        "operationId": "deleteuserplaylists",
         "summary": "Users",
         "description": "Delete User's Playlist with id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "5272457a980bab8465e22ca2aef2ef482a199a237923",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
-        ]
+        ],
+        "responses": {
+          "200": {
+            "description": "Created Successfully"
+          },
+          "400": {
+            "description": "Invalid"
+          }
+        }
       }
     },
     "/users/{id}/image": {
       "put": {
         "tags": ["Users"],
+        "operationId": "updateusersimages",
         "summary": "Users",
         "description": "Update User's Image with id",
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
         ],
         "parameters": [
@@ -1719,30 +1773,44 @@
             }
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Users"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Updated Successfully"
+          },
+          "400": {
+            "description": "Invalid"
           }
         }
       },
       "delete": {
         "tags": ["Users"],
+        "operationId": "deleteusersimages",
         "summary": "Users",
         "description": "Delete User's Images with id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "example": "5272457a980bab8465e22ca2aef2ef482a199a237923",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
-        ]
+        ],
+        "responses": {
+          "200": {
+            "description": "Created Successfully"
+          },
+          "400": {
+            "description": "Invalid"
+          }
+        }
       }
     }
   },
@@ -1963,44 +2031,7 @@
         }
       }
     },
-    "requestBodies": {
-      "Login": {
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/Login"
-            }
-          }
-        }
-      },
-      "Register": {
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/Register"
-            }
-          }
-        }
-      },
-      "Refresh": {
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/Refresh"
-            }
-          }
-        }
-      },
-      "UpdateAlbum": {
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/UpdateAlbum"
-            }
-          }
-        }
-      }
-    },
+    "requestBodies": {},
     "securitySchemes": {
       "BearerAuth": {
         "type": "http",

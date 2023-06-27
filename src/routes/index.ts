@@ -74,5 +74,6 @@ export default (): Router => {
 
     return res.status(200).send(media);
   });
+
   return router;
 };

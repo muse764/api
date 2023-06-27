@@ -2,17 +2,40 @@ import bodyParser from 'body-parser';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import express from 'express';
-import { createServer } from 'http';
+import { createServer as createHttpServer } from 'http';
+// import { createServer as createHttpsServer } from 'https';
 import swaggerUI from 'swagger-ui-express';
-import { errorHandler } from './helpers';
 
 import cors from 'cors';
 import router from './routes';
 
 const app = express();
+// app.use(
+//   cors({
+//     credentials: false,
+//   })
+// );
+
+var allowedOrigins = [
+  'http://open.muse.com',
+  'http://artist.muse.com',
+  'http://admin.muse.com',
+];
+
 app.use(
   cors({
-    credentials: false,
+    origin: function (origin, callback) {
+      // allow requests with no origin
+      // (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        var msg =
+          'The CORS policy for this site does not ' +
+          'allow access from the specified Origin.';
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
   })
 );
 app.use(compression());
@@ -23,7 +46,6 @@ app.use(express.static('public'));
 
 app.use('/v1', router());
 
-app.use(errorHandler);
 app.use(
   '/v1/docs',
   swaggerUI.serve,
@@ -38,11 +60,21 @@ app.use('/v1/openapi.json', (req, res) => {
   res.sendFile('openapi.json', { root: './docs' });
 });
 
-const server = createServer(app);
+app.use((req, res, next) => {
+  res.status(404).redirect('/v1/docs');
+});
+
+const httpServer = createHttpServer(app);
+// const httpsServer = createHttpsServer(app);
 
 const PORT = process.env.PORT ?? 5000;
 
-server.listen(PORT, () =>
+httpServer.listen(PORT, () =>
   console.log(`
 🚀 Server ready at: http://localhost:${PORT}`)
 );
+
+// httpsServer.listen(443, () =>
+//   console.log(`
+// 🚀 Server ready at: http://localhost:443`)
+// );
