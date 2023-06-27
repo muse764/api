@@ -206,3 +206,13 @@ export const removeUsersPlaylistsModel = async (
       },
     },
   });
+
+export const becomeArtistModel = async (user_id: string) =>
+  await prisma.user.update({
+    where: {
+      id: user_id,
+    },
+    data: {
+      role: 'ARTIST',
+    },
+  });

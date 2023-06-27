@@ -8,6 +8,7 @@ import {
   updateUsersProfileController,
   uploadUsersImagesController,
   removeUsersPlaylistsController,
+  becomeArtistController,
 } from '../controllers';
 import { authorize, isAuthenticated } from '../middlewares';
 
@@ -43,5 +44,13 @@ export default (router: Router) => {
     '/users/:user_id/images',
     isAuthenticated,
     uploadUsersImagesController
+  );
+
+  // become an artist
+  router.put(
+    '/users/:user_id/artist',
+    isAuthenticated,
+    authorize('USER'),
+    becomeArtistController
   );
 };

@@ -68,8 +68,10 @@ import {
   updateUsersProfileController,
   uploadUsersImagesController,
   removeUsersPlaylistsController,
+  becomeArtistController,
 } from './users';
 export {
+  becomeArtistController,
   removeUsersPlaylistsController,
   addTracksArtistsController,
   removeTracksArtistsController,

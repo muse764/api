@@ -4,6 +4,7 @@ import { randomUUID } from 'crypto';
 import fs from 'fs';
 import imageSize from 'image-size';
 import {
+  becomeArtistModel,
   createUsersPlaylistModel,
   getSeveralUsersModel,
   getUsersPlaylistsModel,
@@ -315,6 +316,34 @@ export const removeUsersPlaylistsController = async (
 
     const playlist = await removeUsersPlaylistsModel(user_id, playlists);
     return res.status(200).json(playlist);
+  } catch (error: any) {
+    return res.status(500).json({
+      error: {
+        status: 500,
+        message: error.message,
+      },
+    });
+  }
+};
+
+export const becomeArtistController = async (req: Request, res: Response) => {
+  try {
+    const { user_id } = req.params;
+    const { user } = req.body;
+
+    if (user_id !== user.id) {
+      const status = 403;
+      const message = `You can't become an artist for another user`;
+      return res.status(status).json({
+        error: {
+          status,
+          message,
+        },
+      });
+    }
+
+    const artist = await becomeArtistModel(user_id);
+    return res.status(200).json(artist);
   } catch (error: any) {
     return res.status(500).json({
       error: {
